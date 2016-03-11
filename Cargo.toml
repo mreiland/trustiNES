@@ -1,0 +1,4 @@
+[package]
+name = "TrustNES"
+version = "0.0.1"
+authors = ["ReconditePhreak <trustiNES@MichaelReiland.net>"]
