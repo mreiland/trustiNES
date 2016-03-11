@@ -1,3 +1,12 @@
+use std::env;
+
 fn main() {
-  println!("Hello, World!");
+  let args: Vec<String> = env::args().collect();
+  
+  if args.len() < 2 {
+    println!("Usage: main FILE");
+    return;
+  }
+  
+  println!("Loading {}", args[1]);
 }
