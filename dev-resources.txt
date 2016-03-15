@@ -1,6 +1,7 @@
                                    -- RUST --
 https://doc.rust-lang.org/book/
 https://doc.rust-lang.org/stable/std/
+http://rustbyexample.com/
 http://smallcultfollowing.com/rust-int-variations/isize-usize/guide-unsafe.html
 
                                -- NES HARDWARE --
