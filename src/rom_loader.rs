@@ -2,6 +2,8 @@ use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 use std::io;
+use std::io::Seek;
+use std::io::SeekFrom;
 
 #[derive(Debug)]
 pub enum InesError {
@@ -51,11 +53,8 @@ pub fn load_ines<P:AsRef<Path>>(file_path: P) -> Result<Vec<u8>,InesError> {
         return Err(InesError::Unsupported("Loading trainers is not supported".to_string()));
     }
 
-    // we really just want to seek back to byte 0, but I couldn't figure out how to do so... the
-    // documentation apparently lies, so we close/open the file
-    //
-    drop(file);
-    file = try!(File::open(&file_path));
+    file.seek(SeekFrom::Start(0));
+
     let mut file_bytes = Vec::<u8>::new();
     try!(file.read_to_end(&mut file_bytes));
 
