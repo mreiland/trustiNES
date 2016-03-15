@@ -39,7 +39,7 @@ pub fn load_ines<P:AsRef<Path>>(file_path: P) -> Result<Vec<u8>,InesError> {
     
     let header = unsafe {
         let mut header_buf = [0u8;16];
-        file.read(&mut header_buf);
+        let _ = file.read(&mut header_buf);
 
         ::std::mem::transmute::<_,InesHeader>(header_buf)
     };
@@ -53,7 +53,7 @@ pub fn load_ines<P:AsRef<Path>>(file_path: P) -> Result<Vec<u8>,InesError> {
         return Err(InesError::Unsupported("Loading trainers is not supported".to_string()));
     }
 
-    file.seek(SeekFrom::Start(0));
+    let _  = file.seek(SeekFrom::Start(0));
 
     let mut file_bytes = Vec::<u8>::new();
     try!(file.read_to_end(&mut file_bytes));
