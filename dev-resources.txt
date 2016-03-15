@@ -1,0 +1,14 @@
+                                   -- RUST --
+https://doc.rust-lang.org/book/
+https://doc.rust-lang.org/stable/std/
+http://smallcultfollowing.com/rust-int-variations/isize-usize/guide-unsafe.html
+
+                               -- NES HARDWARE --
+http://wiki.nesdev.com/w/index.php/Nesdev_Wiki
+http://wiki.nesdev.com/w/index.php/INES
+https://en.wikibooks.org/wiki/NES_Programming/Memory_Map
+
+                               -- NES OPCODES --
+http://www.6502.org/tutorials/6502opcodes.html
+http://wiki.nesdev.com/w/index.php/CPU_unofficial_opcodes
+
