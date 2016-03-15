@@ -59,7 +59,6 @@ pub fn load_ines<P:AsRef<Path>>(file_path: P) -> Result<Vec<u8>,InesError> {
     let mut file_bytes = Vec::<u8>::new();
     try!(file.read_to_end(&mut file_bytes));
 
-
     // https://en.wikibooks.org/wiki/NES_Programming/Memory_Map
     //
     let mut nes_bytes = Vec::<u8>::with_capacity(::std::u16::MAX as usize);
@@ -87,6 +86,6 @@ pub fn load_ines<P:AsRef<Path>>(file_path: P) -> Result<Vec<u8>,InesError> {
         }
     }
 
-    Ok(file_bytes)
+    Ok(nes_bytes)
 }
 
