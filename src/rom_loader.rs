@@ -37,12 +37,10 @@ pub fn load_ines<P:AsRef<Path>>(file_path: P) -> Result<Vec<u8>,InesError> {
         return Err(InesError::InesFormat("File is smaller than the ines header.".to_string()));
     }
     
-    let header = unsafe {
-        let mut header_buf = [0u8;16];
-        let _ = file.read(&mut header_buf);
+    let mut header_buf = [0u8;16];
+    try!(file.read(&mut header_buf));
+    let header = unsafe { ::std::mem::transmute::<_,InesHeader>(header_buf) };
 
-        ::std::mem::transmute::<_,InesHeader>(header_buf)
-    };
     if header.ines_identifier != 0x1A53454E {
         return Err(InesError::InesFormat("Did not find ines header identifier".to_string()));
     }
@@ -53,7 +51,7 @@ pub fn load_ines<P:AsRef<Path>>(file_path: P) -> Result<Vec<u8>,InesError> {
         return Err(InesError::Unsupported("Loading trainers is not supported".to_string()));
     }
 
-    let _  = file.seek(SeekFrom::Start(0));
+    try!(file.seek(SeekFrom::Start(0)));
 
     let mut file_bytes = Vec::<u8>::new();
     try!(file.read_to_end(&mut file_bytes));
