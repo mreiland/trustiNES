@@ -1,7 +1,7 @@
 [package]
 name = "trusti_nes"
 version = "0.0.1"
-authors = ["ReconditePhreak <trustiNES@MichaelReiland.net>", "Metroids <Metroids@users.noreply.github.com>", "Nesis <llnesisll@gmail.com>"]
+authors = ["ReconditePhreak <trustiNES@MichaelReiland.net>", "Metroids <Metroids@users.noreply.github.com>", "Nesis <llnesisll@gmail.com>", "SeraphLance <kbalbas@gmail.com>"]
 
 [features]
 # no features by default
