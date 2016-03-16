@@ -64,25 +64,18 @@ pub fn load_ines<P:AsRef<Path>>(file_path: P) -> Result<Vec<u8>,InesError> {
     let prg_addr = 16;
     let prg_page_len = 0xBFFF - 0x8000;
 
-    // NOTE: the below implementation is terrible.  I don't know how to memcpy from 1
-    //       vector to another, so we do it manually.  As far as I'm concerned, this is
-    //       *more* error prone than simply calling a memcpy function, but I'm still
-    //       learning rust and it is what it is.
-    //
-
     // nes has 2 prg-rom pages at 0x8000 and 0xC000
     // if the rom has only a single prg-rom page, then we mirror it
-    //
-    for i in 0..prg_page_len {
-        nes_bytes[0x8000+i] = file_bytes[prg_addr+i];
-        if header.prg_rom_banks == 1 {
-            nes_bytes[0xC000+i] = file_bytes[prg_addr+i];
-        }
-        else {
-            nes_bytes[0xC000+i] = file_bytes[prg_addr+prg_page_len+i];
-        }
-    }
-
+    let file_page = &file_bytes[prg_addr..(prg_page_len+prg_addr)];
+    let file_page2 = if header.prg_rom_banks == 1 {
+        file_page
+    } else {
+        &file_bytes[prg_addr..(prg_addr+prg_page_len+prg_addr)]
+    };
+    
+    &nes_bytes[0x8000..(prg_page_len+0x8000)].clone_from_slice(file_page);
+    &nes_bytes[0xC000..(prg_page_len+0xC000)].clone_from_slice(file_page2);
+    
     Ok(nes_bytes)
 }
 
