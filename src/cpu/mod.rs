@@ -1,7 +1,19 @@
+pub struct ExecInfo {
+    stub: bool,
+}
 pub struct DecodeInfo {
-    stub:bool,
+    addr_init: u16,
+    addr_intermediate: u16,
+    addr_final: u16,
+
+    value_init: u8,
+    value_intermediate: u8,
+    value_final: u8,
+
+    info: ExecInfo,
 }
 
+#[allow(non_snake_case)]
 pub struct CpuState {
     pc:u16,
     sp: u8,
@@ -23,7 +35,6 @@ pub struct CpuState {
     instruction_register: u16,
     decode_register:DecodeInfo,
 }
-
 
 impl CpuState {
   fn unpack_flags(self: &CpuState) -> u8 {
