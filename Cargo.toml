@@ -7,3 +7,6 @@ authors = ["ReconditePhreak <trustiNES@MichaelReiland.net>", "Metroids <Metroids
 # no features by default
 default = []
 
+[dependencies]
+byteorder = "*"
+
