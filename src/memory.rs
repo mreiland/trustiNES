@@ -10,7 +10,7 @@ pub enum MemoryError {
 }
 
 pub struct Memory {
-    mem: Vec<u8>,
+    pub mem: Vec<u8>,
 }
 
 
