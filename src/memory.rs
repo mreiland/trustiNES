@@ -15,13 +15,13 @@ pub struct Memory {
 
 
 impl Memory {
-    fn read8(self:&Memory,addr: u16) -> Result<u8,MemoryError> {
+    pub fn read8(self:&Memory,addr: u16) -> Result<u8,MemoryError> {
         match self.resolve_address(addr) {
             Ok(raddr) => Ok(self.mem[raddr]),
             Err(err) => Err(err)
         }
     }
-    fn read16(self:&Memory,addr: u16)  -> Result<u16,MemoryError> {
+    pub fn read16(self:&Memory,addr: u16)  -> Result<u16,MemoryError> {
         match self.resolve_address(addr) {
             Ok(raddr) =>{
                 let mut rdr = Cursor::new(&self.mem[raddr..raddr+1]);
@@ -30,7 +30,7 @@ impl Memory {
             Err(err) => Err(err)
         }
     }
-    fn write8(self:&mut Memory,addr: u16, val:u8) -> Option<MemoryError> {
+    pub fn write8(self:&mut Memory,addr: u16, val:u8) -> Option<MemoryError> {
         match self.resolve_address(addr) {
             Ok(raddr) => {
                 self.mem[raddr] = val;
@@ -39,7 +39,7 @@ impl Memory {
             Err(err) => Option::Some(err)
         }
     }
-    fn write16(self:&mut Memory,addr: u16, val:u16) -> Option<MemoryError> {
+    pub fn write16(self:&mut Memory,addr: u16, val:u16) -> Option<MemoryError> {
         match self.resolve_address(addr) {
             Ok(raddr) => {
                 (&mut self.mem[raddr..(raddr+1)]).write_u16::<LittleEndian>(val).unwrap();
