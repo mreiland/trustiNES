@@ -15,6 +15,13 @@ pub struct Memory {
 
 
 impl Memory {
+    pub fn new() -> Memory {
+        let mut m =  Memory {
+            mem: Vec::with_capacity(::std::u16::MAX as usize)
+        };
+        unsafe { &m.mem.set_len(::std::u16::MAX as usize); }
+        return m;
+    }
     pub fn read8(self:&Memory,addr: u16) -> Result<u8,MemoryError> {
         match self.resolve_address(addr) {
             Ok(raddr) => Ok(self.mem[raddr]),
@@ -24,7 +31,8 @@ impl Memory {
     pub fn read16(self:&Memory,addr: u16)  -> Result<u16,MemoryError> {
         match self.resolve_address(addr) {
             Ok(raddr) =>{
-                let mut rdr = Cursor::new(&self.mem[raddr..raddr+1]);
+                // splices are exclusive on the upper range (half open)
+                let mut rdr = Cursor::new(&self.mem[raddr..(raddr+2)]);
                 Ok(rdr.read_u16::<LittleEndian>().unwrap())
             },
             Err(err) => Err(err)
@@ -42,7 +50,8 @@ impl Memory {
     pub fn write16(self:&mut Memory,addr: u16, val:u16) -> Option<MemoryError> {
         match self.resolve_address(addr) {
             Ok(raddr) => {
-                (&mut self.mem[raddr..(raddr+1)]).write_u16::<LittleEndian>(val).unwrap();
+                // splices are exclusive on the upper range (half open)
+                (&mut self.mem[raddr..(raddr+2)]).write_u16::<LittleEndian>(val).unwrap();
                 Option::None
             },
             Err(err) => Option::Some(err)
