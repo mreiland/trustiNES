@@ -1,5 +1,5 @@
 [package]
-name = "trusti_nes"
+name = "trustines"
 version = "0.0.1"
 authors = ["ReconditePhreak <trustiNES@MichaelReiland.net>", "Metroids <Metroids@users.noreply.github.com>", "Nesis <llnesisll@gmail.com>", "SeraphLance <kbalbas@gmail.com>"]
 
@@ -9,4 +9,12 @@ default = []
 
 [dependencies]
 byteorder = "*"
+
+[lib]
+name = "trustines"
+path = "src/lib.rs"
+
+[[bin]]
+name = "trustines"
+path = "src/bin.rs"
 
