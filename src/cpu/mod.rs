@@ -1,3 +1,6 @@
+pub struct DebugInfo {
+    stub: bool,
+}
 pub struct ExecInfo {
     stub: bool,
 }
