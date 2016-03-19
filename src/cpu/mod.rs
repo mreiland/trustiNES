@@ -1,8 +1,21 @@
+extern crate csv;
+
+use std::io;
+use std::path::Path;
+use std::num;
+use std::collections::HashMap;
+
 pub struct DebugInfo {
-    stub: bool,
+    opcode:u16,
+    name:String,
+    address_mode_name:String,
+    notes:String,
 }
 pub struct ExecInfo {
-    stub: bool,
+    opcode:u16,
+    len:u8,
+    cycles:u8,
+    page_cycles:u8,
 }
 pub struct DecodeInfo {
     addr_init: u16,
