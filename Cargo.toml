@@ -9,6 +9,7 @@ default = []
 
 [dependencies]
 byteorder = "*"
+csv = "*"
 
 [lib]
 name = "trustines"
