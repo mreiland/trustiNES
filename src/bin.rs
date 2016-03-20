@@ -4,14 +4,22 @@ pub mod memory;
 pub mod cpu;
 
 use std::env;
+use cpu::CpuState;
+use memory::Memory;
 
 fn main() {
-    let cpu: cpu::CpuState;
-    cpu::opcode::load_from_file("resources/opcodes.csv");
+    let rom = rom_loader::load_ines("roms/nestest.nes").unwrap();
+    let mut cpu: CpuState = Default::default();
+    let mem:Memory = Memory::new();
+    // TODO: implement loading the rom into the correct position in memory
 
-    match rom_loader::load_ines("roms/nestest.nes") {
-      Ok(_) => (),
-      Err(err) => println!("Error: {:?}", err),
+    // TODO: handle this properly instead of just unwrapping
+    let opcode_info = cpu::opcode::load_from_file("resources/opcodes.csv").unwrap();
+    let executor = cpu::CpuExecutor::new(opcode_info.0);
+
+    for i in 0..10 {
+        executor.fetch_and_decode(&cpu,&mem);
+        executor.execute(&cpu,&mem);
     }
 }
 
