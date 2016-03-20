@@ -5,8 +5,19 @@ use std::io;
 use std::path::Path;
 use std::num;
 use std::collections::HashMap;
-use cpu::ExecInfo;
-use cpu::DebugInfo;
+
+pub struct DebugInfo {
+    opcode: u16,
+    name: String,
+    address_mode_name: String,
+    notes: String,
+}
+pub struct ExecInfo {
+    opcode: u16,
+    len: u8,
+    cycles: u8,
+    page_cycles: u8,
+}
 
 #[derive(Debug)]
 pub enum OpcodeLoadError {

@@ -5,18 +5,9 @@ use std::path::Path;
 use std::num;
 use std::collections::HashMap;
 
-pub struct DebugInfo {
-    opcode: u16,
-    name: String,
-    address_mode_name: String,
-    notes: String,
-}
-pub struct ExecInfo {
-    opcode: u16,
-    len: u8,
-    cycles: u8,
-    page_cycles: u8,
-}
+use cpu::opcode::ExecInfo;
+use cpu::opcode::DebugInfo;
+
 pub struct DecodeInfo {
     addr_init: u16,
     addr_intermediate: u16,
