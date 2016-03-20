@@ -26,7 +26,7 @@ impl From<num::ParseIntError> for OpcodeLoadError {
     }
 }
 
-pub fn load_opcodes<P:AsRef<Path>>(file_path: P) -> Result<(HashMap<u16,ExecInfo>,HashMap<u16,DebugInfo>),OpcodeLoadError> {
+pub fn load_from_file<P:AsRef<Path>>(file_path: P) -> Result<(HashMap<u16,ExecInfo>,HashMap<u16,DebugInfo>),OpcodeLoadError> {
     let mut rdr = try!(csv::Reader::from_file(file_path));
     rdr = rdr.has_headers(true);
     rdr = rdr.flexible(false); // all records are the same length
