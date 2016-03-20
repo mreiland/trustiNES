@@ -10,4 +10,4 @@ cargo clean
 echo.
 echo CLEANUP OF BUILD FILES FINISHED
 echo.
-pause
+rem pause
