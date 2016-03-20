@@ -13,12 +13,15 @@ pub enum OpcodeClass {
     ILL_RLA, ILL_RRA, ILL_SAX, ILL_SBC, ILL_SHX, ILL_SHY, ILL_SLO, ILL_SRE, ILL_TAS, ILL_XAA,
 }
 
+#[derive(Default)]
 pub struct OpcodeDebugInfo {
     pub opcode: u16,
     pub name: String,
     pub address_mode_name: String,
     pub notes: String,
 }
+
+#[derive(Default)]
 pub struct OpcodeExecInfo {
     pub opcode: u16,
     pub len: u8,
