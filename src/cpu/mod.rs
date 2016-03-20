@@ -6,16 +6,16 @@ use std::num;
 use std::collections::HashMap;
 
 pub struct DebugInfo {
-    opcode:u16,
-    name:String,
-    address_mode_name:String,
-    notes:String,
+    opcode: u16,
+    name: String,
+    address_mode_name: String,
+    notes: String,
 }
 pub struct ExecInfo {
-    opcode:u16,
-    len:u8,
-    cycles:u8,
-    page_cycles:u8,
+    opcode: u16,
+    len: u8,
+    cycles: u8,
+    page_cycles: u8,
 }
 pub struct DecodeInfo {
     addr_init: u16,
@@ -31,7 +31,7 @@ pub struct DecodeInfo {
 
 #[allow(non_snake_case)]
 pub struct CpuState {
-    pc:u16,
+    pc: u16,
     sp: u8,
     a:  u8,
     x:  u8,
@@ -74,5 +74,4 @@ impl CpuState {
     self.S        = ( (flags >> 7) & 1) == 1; 
   }
 }
-
 

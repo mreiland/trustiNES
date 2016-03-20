@@ -9,7 +9,6 @@ fn main() {
     let cpu: cpu::CpuState;
     cpu::opcode::load_from_file("resources/opcodes.csv");
 
-
     match rom_loader::load_ines("roms/nestest.nes") {
       Ok(_) => (),
       Err(err) => println!("Error: {:?}", err),
