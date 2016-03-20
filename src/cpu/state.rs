@@ -1,4 +1,4 @@
-use cpu::opcode::ExecInfo;
+use cpu::common_defs::OpcodeExecInfo;
 
 pub struct DecodeInfo {
     addr_init: u16,
@@ -9,7 +9,7 @@ pub struct DecodeInfo {
     value_intermediate: u8,
     value_final: u8,
 
-    info: ExecInfo,
+    info: OpcodeExecInfo,
 }
 
 #[allow(non_snake_case)]

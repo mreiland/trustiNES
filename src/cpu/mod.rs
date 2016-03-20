@@ -2,12 +2,16 @@
 pub mod opcode;
 
 //private mods
-mod state;
+mod common_defs;
 mod executor;
+mod state;
 
 // hoisted interfaces
-pub use self::state::CpuState;
-pub use self::state::DecodeInfo;
+pub use self::common_defs::OpcodeDebugInfo;
+pub use self::common_defs::OpcodeExecInfo;
 
 pub use self::executor::CpuExecutor;
+
+pub use self::state::CpuState;
+pub use self::state::DecodeInfo;
 
