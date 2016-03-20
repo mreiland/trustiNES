@@ -1,6 +1,6 @@
 use cpu::common_defs::OpcodeExecInfo;
 
-pub struct DecodeInfo {
+pub struct DecodeRegister {
     addr_init: u16,
     addr_intermediate: u16,
     addr_final: u16,
@@ -32,7 +32,7 @@ pub struct CpuState {
 
     // these are not strictly 6502 registers, but are useful for modeling the cpu
     instruction_register: u16,
-    decode_register:DecodeInfo,
+    decode_register:DecodeRegister,
 }
 
 impl CpuState {

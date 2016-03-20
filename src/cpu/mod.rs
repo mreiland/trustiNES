@@ -13,5 +13,5 @@ pub use self::common_defs::OpcodeExecInfo;
 pub use self::executor::CpuExecutor;
 
 pub use self::state::CpuState;
-pub use self::state::DecodeInfo;
+pub use self::state::DecodeRegister;
 
