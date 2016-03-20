@@ -11,7 +11,6 @@ fn main() {
 
 
     match rom_loader::load_ines("roms/nestest.nes") {
-    //match load_ines(args[1]) {
       Ok(_) => (),
       Err(err) => println!("Error: {:?}", err),
     }
