@@ -1,6 +1,6 @@
 @echo off
 cd ..
-echo COMMENCING LIB BUILD
+echo COMMENCING CLEANUP OF BUILD FILES
 echo.
 @echo on
 
@@ -8,6 +8,6 @@ cargo clean
 
 @echo off
 echo.
-echo LIB BUILD FINISHED
+echo CLEANUP OF BUILD FILES FINISHED
 echo.
 pause
