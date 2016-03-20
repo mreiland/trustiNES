@@ -1,5 +1,6 @@
 pub mod opcode;
 mod state;
+mod executor;
 
 use std::io;
 use std::path::Path;
@@ -13,3 +14,4 @@ pub use self::state::CpuState;
 pub use self::state::DecodeInfo;
 
 
+pub use self::executor::CpuExecutor;
