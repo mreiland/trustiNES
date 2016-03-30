@@ -19,7 +19,10 @@ pub struct OpcodeDebugInfo {
 #[derive(Default)]
 pub struct OpcodeExecInfo {
     pub opcode: u16,
+    pub opcode_class:OpcodeClass,
+    pub address_mode:AddressMode,
     pub len: u8,
     pub cycles: u8,
     pub page_cycles: u8,
 }
+

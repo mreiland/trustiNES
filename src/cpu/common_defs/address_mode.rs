@@ -30,3 +30,6 @@ impl FromStr for AddressMode {
     }
 }
 
+impl Default for AddressMode {
+    fn default() -> AddressMode { AddressMode::None }
+}

@@ -5,6 +5,8 @@ use std::io;
 use std::path::Path;
 use std::num;
 use std::collections::HashMap;
+use cpu::common_defs::OpcodeClass;
+use cpu::common_defs::AddressMode;
 pub use cpu::common_defs::OpcodeExecInfo;
 pub use cpu::common_defs::OpcodeDebugInfo;
 
@@ -39,11 +41,16 @@ pub fn load_from_file<P:AsRef<Path>>(file_path: P) -> Result<(Vec<OpcodeExecInfo
         let (opcode_string,name,address_mode_name,len,cycles,page_cycles,notes) : (String,String,String,u8,u8,u8,String) = rec.unwrap();
         let opcode = try!(u16::from_str_radix(&opcode_string[2..],16)); // from_str_radix won't parse 0x
 
-        let mut debug_info = OpcodeDebugInfo { opcode : opcode, name : name, address_mode_name : address_mode_name, notes : notes, };
+        let mut debug_info = OpcodeDebugInfo { opcode : opcode, name : name.clone(), address_mode_name : address_mode_name.clone(), notes : notes, };
         debug_info_hash.push(debug_info);
 
-        let mut exec_info = OpcodeExecInfo { opcode: opcode, len: len, cycles: cycles, page_cycles: page_cycles, };
+        let address_mode = address_mode_name.parse::<AddressMode>().unwrap();
+        let opcode_class = name.parse::<OpcodeClass>().unwrap();
+
+        let mut exec_info = OpcodeExecInfo { opcode: opcode, len: len, cycles: cycles, page_cycles: page_cycles, address_mode: address_mode,opcode_class:opcode_class };
         exec_info_hash.push(exec_info);
     }
     Ok((exec_info_hash,debug_info_hash))
 }
+
+

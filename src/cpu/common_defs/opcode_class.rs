@@ -63,3 +63,7 @@ impl FromStr for OpcodeClass {
         }
     }
 }
+
+impl Default for OpcodeClass {
+    fn default() -> OpcodeClass { OpcodeClass::None }
+}
