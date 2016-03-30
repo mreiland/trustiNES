@@ -1,36 +1,6 @@
 use std::str::FromStr;
 
 #[derive(Debug)]
-pub enum AddressMode {
-    None = 0,
-    Absolute,        AbsoluteX,
-    AbsoluteY,       Accumulator,
-    Immediate,       Implied,
-    Indirect,        IndexedIndirect,
-    IndirectIndexed, Relative,
-    ZeroPage,        ZeroPageX,
-    ZeroPageY,
-}
-
-impl FromStr for AddressMode {
-    type Err = ();
-
-    fn from_str(s:&str) -> Result<Self,Self::Err> {
-        match s {
-            "Absolute"        => Ok(AddressMode::Absolute       ), "AbsoluteX"       => Ok(AddressMode::AbsoluteX),
-            "AbsoluteY"       => Ok(AddressMode::AbsoluteY      ), "Accumulator"     => Ok(AddressMode::Accumulator),
-            "Immediate"       => Ok(AddressMode::Immediate      ), "Implied"         => Ok(AddressMode::Implied),
-            "Indirect"        => Ok(AddressMode::Indirect       ), "IndexedIndirect" => Ok(AddressMode::IndexedIndirect),
-            "IndirectIndexed" => Ok(AddressMode::IndirectIndexed), "Relative"        => Ok(AddressMode::Relative),
-            "ZeroPage"        => Ok(AddressMode::ZeroPage       ), "ZeroPageX"       => Ok(AddressMode::ZeroPageX),
-            "ZeroPageY"       => Ok(AddressMode::ZeroPageY      ),
-
-            _ => Err(())
-        }
-    }
-}
-
-#[derive(Debug)]
 #[allow(non_camel_case_types)]
 pub enum OpcodeClass {
     None = 0,
@@ -92,20 +62,4 @@ impl FromStr for OpcodeClass {
             _ => Err(())
         }
     }
-}
-
-#[derive(Default)]
-pub struct OpcodeDebugInfo {
-    pub opcode: u16,
-    pub name: String,
-    pub address_mode_name: String,
-    pub notes: String,
-}
-
-#[derive(Default)]
-pub struct OpcodeExecInfo {
-    pub opcode: u16,
-    pub len: u8,
-    pub cycles: u8,
-    pub page_cycles: u8,
 }
