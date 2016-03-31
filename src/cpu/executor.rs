@@ -1,5 +1,5 @@
 use cpu::common_defs::OpcodeExecInfo;
-use cpu::state::CpuState;
+use cpu::CpuState;
 use memory::Memory;
 use std::collections::HashMap;
 
