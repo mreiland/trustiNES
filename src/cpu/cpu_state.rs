@@ -16,29 +16,29 @@ pub struct DecodeRegister {
 #[allow(non_snake_case)]
 #[derive(Default)]
 pub struct CpuState {
-    pc: u16,
-    sp: u8,
-    a:  u8,
-    x:  u8,
-    y:  u8,
+    pub pc: u16,
+    pub sp: u8,
+    pub a:  u8,
+    pub x:  u8,
+    pub y:  u8,
 
     // flags
-    C: bool, // carry
-    Z: bool, // zero
-    I: bool, // interrupt
-    D: bool, // decimal
-    B: bool, // break
+    pub C: bool, // carry
+    pub Z: bool, // zero
+    pub I: bool, // interrupt
+    pub D: bool, // decimal
+    pub B: bool, // break
              // bit 5 is not used by the nes and is always 1
-    V: bool, // overflow
-    S: bool, // sign/negative
+    pub V: bool, // overflow
+    pub S: bool, // sign/negative
 
     // these are not strictly 6502 registers, but are useful for modeling the cpu
-    instruction_register: u16,
-    decode_register:DecodeRegister,
+    pub instruction_register: u16,
+    pub decode_register:DecodeRegister,
 }
 
 impl CpuState {
-    fn unpack_flags(self: &CpuState) -> u8 {
+    pub fn unpack_flags(self: &CpuState) -> u8 {
         ( (self.C as u8) << 0)
       | ( (self.Z as u8) << 1)
       | ( (self.I as u8) << 2)
@@ -48,7 +48,7 @@ impl CpuState {
       | ( (self.V as u8) << 6)
       | ( (self.S as u8) << 7)
     }
-    fn pack_flags(self: &mut CpuState,flags:u8) {
+    pub fn pack_flags(self: &mut CpuState,flags:u8) {
         self.C        = ( (flags >> 0) & 1) == 1;
         self.Z        = ( (flags >> 1) & 1) == 1; 
         self.I        = ( (flags >> 2) & 1) == 1; 
