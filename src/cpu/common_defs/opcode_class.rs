@@ -30,8 +30,13 @@ pub enum OpcodeClass {
     ILL_XAA,
 }
 
+#[derive(Debug)]
+pub enum ParseError {
+    InvalidString(String)
+}
+
 impl FromStr for OpcodeClass {
-    type Err = ();
+    type Err = ParseError;
 
     fn from_str(s:&str) -> Result<Self,Self::Err> {
         match s {
@@ -59,7 +64,7 @@ impl FromStr for OpcodeClass {
             "ILL_SLO"  => Ok(OpcodeClass::ILL_SLO ), "ILL_SRE"  => Ok(OpcodeClass::ILL_SRE ), "ILL_TAS" => Ok(OpcodeClass::ILL_TAS),
             "ILL_XAA"  => Ok(OpcodeClass::ILL_XAA ),
 
-            _ => Err(())
+            _ => Err(ParseError::InvalidString(s.to_string()))
         }
     }
 }

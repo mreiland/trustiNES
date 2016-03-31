@@ -12,8 +12,13 @@ pub enum AddressMode {
     ZeroPageY,
 }
 
+#[derive(Debug)]
+pub enum ParseError {
+    InvalidString(String)
+}
+
 impl FromStr for AddressMode {
-    type Err = ();
+    type Err = ParseError;
 
     fn from_str(s:&str) -> Result<Self,Self::Err> {
         match s {
@@ -25,7 +30,7 @@ impl FromStr for AddressMode {
             "ZeroPage"        => Ok(AddressMode::ZeroPage       ), "ZeroPageX"       => Ok(AddressMode::ZeroPageX),
             "ZeroPageY"       => Ok(AddressMode::ZeroPageY      ),
 
-            _ => Err(())
+            _ => Err(ParseError::InvalidString(s.to_string()))
         }
     }
 }

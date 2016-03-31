@@ -5,17 +5,18 @@ use std::io;
 use std::path::Path;
 use std::num;
 use std::collections::HashMap;
-use cpu::common_defs::OpcodeClass;
-use cpu::common_defs::AddressMode;
-pub use cpu::common_defs::OpcodeExecInfo;
-pub use cpu::common_defs::OpcodeDebugInfo;
-
+use cpu::common_defs::OpcodeExecInfo;
+use cpu::common_defs::OpcodeDebugInfo;
+use cpu::common_defs::opcode_class;
+use cpu::common_defs::address_mode;
 
 #[derive(Debug)]
 pub enum OpcodeLoadError {
   Io(io::Error),
   CSV(csv::Error),
   ParseInt(num::ParseIntError),
+  ParseOpcodeClass(opcode_class::ParseError),
+  ParseAddressMode(address_mode::ParseError)
 }
 
 impl From<csv::Error> for OpcodeLoadError {
@@ -26,6 +27,16 @@ impl From<csv::Error> for OpcodeLoadError {
 impl From<num::ParseIntError> for OpcodeLoadError {
     fn from(err:num::ParseIntError) -> OpcodeLoadError {
         OpcodeLoadError::ParseInt(err)
+    }
+}
+impl From<opcode_class::ParseError> for OpcodeLoadError {
+    fn from(err:opcode_class::ParseError) -> OpcodeLoadError {
+        OpcodeLoadError::ParseOpcodeClass(err)
+    }
+}
+impl From<address_mode::ParseError> for OpcodeLoadError {
+    fn from(err:address_mode::ParseError) -> OpcodeLoadError {
+        OpcodeLoadError::ParseAddressMode(err)
     }
 }
 
@@ -44,13 +55,12 @@ pub fn load_from_file<P:AsRef<Path>>(file_path: P) -> Result<(Vec<OpcodeExecInfo
         let mut debug_info = OpcodeDebugInfo { opcode : opcode, name : name.clone(), address_mode_name : address_mode_name.clone(), notes : notes, };
         debug_info_hash.push(debug_info);
 
-        let address_mode = address_mode_name.parse::<AddressMode>().unwrap();
-        let opcode_class = name.parse::<OpcodeClass>().unwrap();
+        let address_mode = try!(address_mode_name.parse::<address_mode::AddressMode>());
+        let opcode_class = try!(name.parse::<opcode_class::OpcodeClass>());
 
         let mut exec_info = OpcodeExecInfo { opcode: opcode, len: len, cycles: cycles, page_cycles: page_cycles, address_mode: address_mode,opcode_class:opcode_class };
         exec_info_hash.push(exec_info);
     }
     Ok((exec_info_hash,debug_info_hash))
 }
-
 
