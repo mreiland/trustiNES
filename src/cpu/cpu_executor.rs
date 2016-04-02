@@ -24,7 +24,10 @@ impl CpuExecutor {
         }
     }
 
-    pub fn reset(self: &CpuExecutor, mut cpu_state: &CpuState, mut mem:&Memory) {
+    pub fn reset(self: &CpuExecutor, cpu_state: &mut CpuState, mem:&mut Memory) {
+        cpu_state.pc = mem.read16(0xFFFC).unwrap();
+        cpu_state.sp = 0xFD;
+        cpu_state.pack_flags(0x24);
     }
 
     pub fn fetch_and_decode(self: &CpuExecutor, mut cpu_state: &CpuState,mut mem:&Memory) {
