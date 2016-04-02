@@ -30,11 +30,11 @@ impl CpuExecutor {
         cpu_state.pack_flags(0x24);
     }
 
-    pub fn fetch_and_decode(self: &CpuExecutor, mut cpu_state: &CpuState,mut mem:&Memory) {
+    pub fn fetch_and_decode(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
     }
     pub fn execute(self: &CpuExecutor, mut cpu_state: &CpuState,mut mem:&Memory) {
     }
-    pub fn step(self: &CpuExecutor, mut cpu_state: &CpuState,mut mem:&Memory) {
+    pub fn step(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
         self.fetch_and_decode(cpu_state,mem);
         self.execute(cpu_state,mem);
     }

@@ -10,7 +10,7 @@ use memory::Memory;
 fn main() {
     let rom = rom_loader::load_ines("roms/nestest.nes").unwrap();
     let mut cpu: CpuState = Default::default();
-    let mem:Memory = Memory::new();
+    let mut mem:Memory = Memory::new();
     // TODO: implement loading the rom into the correct position in memory
 
     // TODO: handle this properly instead of just unwrapping
@@ -18,8 +18,8 @@ fn main() {
     let executor = cpu::CpuExecutor::new(opcode_info.0);
 
     for i in 0..10 {
-        executor.fetch_and_decode(&cpu,&mem);
-        executor.execute(&cpu,&mem);
+        executor.fetch_and_decode(&mut cpu,&mut mem);
+        executor.execute(&mut cpu,&mut mem);
     }
 }
 
