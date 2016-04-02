@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-#[derive(Debug)]
+#[derive(Clone,Debug)]
 #[allow(non_camel_case_types)]
 pub enum OpcodeClass {
     None = 0,
