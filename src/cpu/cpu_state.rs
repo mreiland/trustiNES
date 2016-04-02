@@ -33,7 +33,7 @@ pub struct CpuState {
     pub S: bool, // sign/negative
 
     // these are not strictly 6502 registers, but are useful for modeling the cpu
-    pub instruction_register: u16,
+    pub instruction_register: u8,
     pub decode_register:DecodeRegister,
 }
 
