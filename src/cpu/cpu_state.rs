@@ -2,15 +2,15 @@ use cpu::common_defs::OpcodeExecInfo;
 
 #[derive(Default)]
 pub struct DecodeRegister {
-    addr_init: u16,
-    addr_intermediate: u16,
-    addr_final: u16,
+    pub addr_init: u16,
+    pub addr_intermediate: u16,
+    pub addr_final: u16,
 
-    value_init: u8,
-    value_intermediate: u8,
-    value_final: u8,
+    pub value_init: u8,
+    pub value_intermediate: u8,
+    pub value_final: u8,
 
-    info: OpcodeExecInfo,
+    pub info: OpcodeExecInfo,
 }
 
 #[allow(non_snake_case)]
