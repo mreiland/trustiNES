@@ -64,7 +64,10 @@ impl CpuExecutor {
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
             AddressMode::Accumulator     => { },
-            AddressMode::Immediate       => { },
+            AddressMode::Immediate       => {
+                dr.addr_final  = Some(cpu_state.pc+1);
+                dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
+            },
             AddressMode::Implied         => { },
             AddressMode::Indirect        => { },
             AddressMode::IndexedIndirect => { },
