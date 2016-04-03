@@ -50,7 +50,7 @@ pub fn load_from_file<P:AsRef<Path>>(file_path: P) -> Result<(Vec<OpcodeExecInfo
 
     for rec in rdr.decode() {
         let (opcode_string,name,address_mode_name,len,cycles,page_cycles,notes) : (String,String,String,u8,u8,u8,String) = rec.unwrap();
-        let opcode = try!(u16::from_str_radix(&opcode_string[2..],16)); // from_str_radix won't parse 0x
+        let opcode = try!(u8::from_str_radix(&opcode_string[2..],16)); // from_str_radix won't parse 0x
 
         let mut debug_info = OpcodeDebugInfo { opcode : opcode, name : name.clone(), address_mode_name : address_mode_name.clone(), notes : notes, };
         debug_info_hash.push(debug_info);

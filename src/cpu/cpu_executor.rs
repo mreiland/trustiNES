@@ -1,16 +1,17 @@
 use cpu::common_defs::OpcodeExecInfo;
 use cpu::CpuState;
+use cpu::DecodeRegister;
 use memory::Memory;
 use std::collections::HashMap;
 
 pub struct CpuExecutor {
-    op_table: HashMap<u16,OpcodeExecInfo>,
+    op_table: HashMap<u8,OpcodeExecInfo>,
 }
 
 impl CpuExecutor {
     pub fn new(opcodes: Vec<OpcodeExecInfo> ) -> CpuExecutor {
         // Construct the HashMap and copy it over to CpuExecutor's constructor.
-        let mut op_table_temp: HashMap<u16, OpcodeExecInfo> = HashMap::new();
+        let mut op_table_temp: HashMap<u8, OpcodeExecInfo> = HashMap::new();
         for oc in opcodes {
             if op_table_temp.contains_key(&oc.opcode) {
                 println!("Encountered duplicate opcode: {:#x}", oc.opcode);
