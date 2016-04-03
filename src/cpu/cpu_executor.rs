@@ -55,8 +55,14 @@ impl CpuExecutor {
                 dr.addr_final  = Some(mem.read16(cpu_state.pc+1).unwrap());
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
-            AddressMode::AbsoluteX       => { },
-            AddressMode::AbsoluteY       => { },
+            AddressMode::AbsoluteX       => {
+                dr.addr_final  = Some(mem.read16(cpu_state.pc+1).unwrap() + cpu_state.x as u16);
+                dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
+            },
+            AddressMode::AbsoluteY       => {
+                dr.addr_final  = Some(mem.read16(cpu_state.pc+1).unwrap() + cpu_state.y as u16);
+                dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
+            },
             AddressMode::Accumulator     => { },
             AddressMode::Immediate       => { },
             AddressMode::Implied         => { },
