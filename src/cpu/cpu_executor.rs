@@ -69,9 +69,9 @@ impl CpuExecutor {
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
             AddressMode::Implied         => { },
-            AddressMode::Indirect        => { },
-            AddressMode::IndexedIndirect => { },
-            AddressMode::IndirectIndexed => { },
+            //AddressMode::Indirect        => { },
+            //AddressMode::IndexedIndirect => { },
+            //AddressMode::IndirectIndexed => { },
             AddressMode::Relative        => {
                 dr.addr_final  = Some(cpu_state.pc+1);
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
@@ -80,8 +80,8 @@ impl CpuExecutor {
                 dr.addr_final  = Some(mem.read8(cpu_state.pc+1).unwrap() as u16);
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
-            AddressMode::ZeroPageX       => {},
-            AddressMode::ZeroPageY       => { },
+            //AddressMode::ZeroPageX       => {},
+            //AddressMode::ZeroPageY       => {},
             _ => panic!("unrecognized addressing mode while decoding instruction_register!")
         }
 
