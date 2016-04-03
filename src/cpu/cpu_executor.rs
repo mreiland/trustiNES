@@ -44,12 +44,15 @@ impl CpuExecutor {
     }
 
     fn decode(self: &CpuExecutor, cpu_state: &CpuState, mem: &Memory) -> DecodeRegister {
-        let dr = DecodeRegister {
+        let mut dr = DecodeRegister {
             info : self.op_table[&cpu_state.instruction_register].clone(),
             ..Default::default()
         };
         match dr.info.address_mode {
-            AddressMode::Absolute        => { },
+            AddressMode::Absolute => {
+                dr.addr_final  = Some(mem.read16(cpu_state.pc+1).unwrap());
+                dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
+            },
             AddressMode::AbsoluteX       => { },
             AddressMode::AbsoluteY       => { },
             AddressMode::Accumulator     => { },
@@ -58,9 +61,15 @@ impl CpuExecutor {
             AddressMode::Indirect        => { },
             AddressMode::IndexedIndirect => { },
             AddressMode::IndirectIndexed => { },
-            AddressMode::Relative        => { },
-            AddressMode::ZeroPage        => { },
-            AddressMode::ZeroPageX       => { },
+            AddressMode::Relative        => {
+                dr.addr_final  = Some(cpu_state.pc+1);
+                dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
+            },
+            AddressMode::ZeroPage        => {
+                dr.addr_final  = Some(mem.read8(cpu_state.pc+1).unwrap() as u16);
+                dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
+            },
+            AddressMode::ZeroPageX       => {},
             AddressMode::ZeroPageY       => { },
             _ => panic!("unrecognized addressing mode while decoding instruction_register!")
         }
