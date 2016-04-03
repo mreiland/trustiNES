@@ -70,7 +70,7 @@ impl CpuExecutor {
             },
             AddressMode::Implied         => { },
             AddressMode::Indirect        => {
-                dr.addr_final  = Some(mem.read16(cpu_state.pc+1).unwrap());
+                dr.addr_final  = Some(mem.read16(mem.read16(cpu_state.pc+1).unwrap()).unwrap());
             },
             //AddressMode::IndexedIndirect => { },
             //AddressMode::IndirectIndexed => { },
