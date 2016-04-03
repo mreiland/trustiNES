@@ -34,7 +34,9 @@ impl CpuExecutor {
 
     pub fn fetch_and_decode(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
         cpu_state.instruction_register = mem.read8(cpu_state.pc).unwrap();
-        cpu_state.pc=cpu_state.pc+1;
+        cpu_state.decode_register = self.decode(cpu_state,mem);
+
+        cpu_state.pc = cpu_state.pc + cpu_state.decode_register.info.len as u16;
     }
     pub fn execute(self: &CpuExecutor, mut cpu_state: &CpuState,mut mem:&Memory) {
     }
