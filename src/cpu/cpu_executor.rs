@@ -1,6 +1,7 @@
 use cpu::common_defs::OpcodeExecInfo;
 use cpu::CpuState;
 use cpu::DecodeRegister;
+use cpu::common_defs::address_mode::AddressMode;
 use memory::Memory;
 use std::collections::HashMap;
 
@@ -41,4 +42,30 @@ impl CpuExecutor {
         self.fetch_and_decode(cpu_state,mem);
         self.execute(cpu_state,mem);
     }
+
+    fn decode(self: &CpuExecutor, cpu_state: &CpuState, mem: &Memory) -> DecodeRegister {
+        let dr = DecodeRegister {
+            info : self.op_table[&cpu_state.instruction_register].clone(),
+            ..Default::default()
+        };
+        match dr.info.address_mode {
+            AddressMode::Absolute        => { },
+            AddressMode::AbsoluteX       => { },
+            AddressMode::AbsoluteY       => { },
+            AddressMode::Accumulator     => { },
+            AddressMode::Immediate       => { },
+            AddressMode::Implied         => { },
+            AddressMode::Indirect        => { },
+            AddressMode::IndexedIndirect => { },
+            AddressMode::IndirectIndexed => { },
+            AddressMode::Relative        => { },
+            AddressMode::ZeroPage        => { },
+            AddressMode::ZeroPageX       => { },
+            AddressMode::ZeroPageY       => { },
+            _ => panic!("unrecognized addressing mode while decoding instruction_register!")
+        }
+
+        return dr;
+    }
 }
+
