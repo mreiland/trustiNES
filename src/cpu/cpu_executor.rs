@@ -51,6 +51,11 @@ impl CpuExecutor {
             ..Default::default()
         };
         match dr.info.address_mode {
+            // no explicit addresses for the following modes
+            AddressMode::Accumulator  => { },
+            AddressMode::Implied      => { },
+
+            // explicit addresses from here on out
             AddressMode::Absolute => {
                 dr.addr_final  = Some(mem.read16(cpu_state.pc+1).unwrap());
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
@@ -63,12 +68,10 @@ impl CpuExecutor {
                 dr.addr_final  = Some(mem.read16(cpu_state.pc+1).unwrap() + cpu_state.y as u16);
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
-            AddressMode::Accumulator     => { },
             AddressMode::Immediate       => {
                 dr.addr_final  = Some(cpu_state.pc+1);
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
-            AddressMode::Implied         => { },
             AddressMode::Indirect        => {
                 dr.addr_intermediate = Some(mem.read16(cpu_state.pc+1).unwrap());
                 dr.addr_final        = Some(mem.read16(dr.addr_intermediate.unwrap()).unwrap());
