@@ -25,3 +25,16 @@ pub struct OpcodeExecInfo {
     pub page_cycles: u8,
 }
 
+impl Clone for OpcodeExecInfo {
+    fn clone(&self) -> OpcodeExecInfo {
+        OpcodeExecInfo {
+            opcode :self.opcode,
+            opcode_class : self.opcode_class.clone(),
+            address_mode : self.address_mode.clone(),
+            len : self.len,
+            cycles : self.cycles,
+            page_cycles : self.page_cycles,
+        }
+    }
+}
+
