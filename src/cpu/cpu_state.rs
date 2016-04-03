@@ -1,14 +1,15 @@
 use cpu::common_defs::OpcodeExecInfo;
+use std::option::Option;
 
 #[derive(Default)]
 pub struct DecodeRegister {
-    pub addr_init: u16,
-    pub addr_intermediate: u16,
-    pub addr_final: u16,
+    pub addr_init: Option<u16>,
+    pub addr_intermediate: Option<u16>,
+    pub addr_final: Option<u16>,
 
-    pub value_init: u8,
-    pub value_intermediate: u8,
-    pub value_final: u8,
+    pub value_init: Option<u8>,
+    pub value_intermediate: Option<u8>,
+    pub value_final: Option<u8>,
 
     pub info: OpcodeExecInfo,
 }
