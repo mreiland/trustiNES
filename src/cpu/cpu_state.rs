@@ -1,7 +1,7 @@
 use cpu::common_defs::OpcodeExecInfo;
 use std::option::Option;
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct DecodeRegister {
     pub addr_init: Option<u16>,
     pub addr_intermediate: Option<u16>,
@@ -15,7 +15,7 @@ pub struct DecodeRegister {
 }
 
 #[allow(non_snake_case)]
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct CpuState {
     pub pc: u16,
     pub sp: u8,
@@ -60,3 +60,6 @@ impl CpuState {
         self.S        = ( (flags >> 7) & 1) == 1; 
     }
 }
+
+
+

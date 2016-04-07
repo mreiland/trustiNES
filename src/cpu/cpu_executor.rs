@@ -2,6 +2,7 @@ use cpu::common_defs::OpcodeExecInfo;
 use cpu::CpuState;
 use cpu::DecodeRegister;
 use cpu::common_defs::address_mode::AddressMode;
+use cpu::common_defs::opcode_class::OpcodeClass;
 use memory::Memory;
 use std::collections::HashMap;
 
@@ -35,11 +36,43 @@ impl CpuExecutor {
     pub fn fetch_and_decode(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
         cpu_state.instruction_register = mem.read8(cpu_state.pc).unwrap();
         cpu_state.decode_register = self.decode(cpu_state,mem);
-
         cpu_state.pc = cpu_state.pc + cpu_state.decode_register.info.len as u16;
     }
-    pub fn execute(self: &CpuExecutor, mut cpu_state: &CpuState,mut mem:&Memory) {
+    pub fn execute(self: &CpuExecutor, mut cpu_state: &CpuState, mut mem:&Memory) {
+    	
+    	// The state of the CPU after executing the current instruction.
+    	let mut new_cpu_state = cpu_state.clone();
+    	
+    	// Figure out which opcode is being executed.
+    	let ref decode_register = cpu_state.decode_register;
+    	match decode_register.info.opcode_class {
+    		
+    		// LDA (Load Accumulator)
+    		OpcodeClass::LDA => {
+    			new_cpu_state.a = decode_register.value_final.unwrap();
+    		},
+    		
+    		// LDX (Load X)
+    		OpcodeClass::LDX => {
+    			new_cpu_state.x = decode_register.value_final.unwrap();
+    		}
+    		
+    		// LDY (Load Y)
+    		OpcodeClass::LDY => {
+    			new_cpu_state.y = decode_register.value_final.unwrap();
+    		}
+    		
+    		// NOP (No Operation)
+    		OpcodeClass::NOP => {}
+    		
+			_ => panic!("Unrecognised opcode class")
+
+    	}
+    	
+    	new_cpu_state;
+    	
     }
+    
     pub fn step(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
         self.fetch_and_decode(cpu_state,mem);
         self.execute(cpu_state,mem);
