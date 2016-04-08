@@ -11,6 +11,8 @@ pub struct CpuExecutor {
 }
 
 impl CpuExecutor {
+	
+	/// Construct a new CpuExecutor.
     pub fn new(opcodes: Vec<OpcodeExecInfo> ) -> CpuExecutor {
         // Construct the HashMap and copy it over to CpuExecutor's constructor.
         let mut op_table_temp: HashMap<u8, OpcodeExecInfo> = HashMap::new();
@@ -27,57 +29,29 @@ impl CpuExecutor {
         }
     }
 
+	/// Reset the given cpu_state.
     pub fn reset(self: &CpuExecutor, cpu_state: &mut CpuState, mem:&mut Memory) {
         cpu_state.pc = mem.read16(0xFFFC).unwrap();
         cpu_state.sp = 0xFD;
         cpu_state.pack_flags(0x24);
     }
+    
+    /// Execute a single instruction in the given memory and cpu_state context.
+    pub fn step(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
+        self.fetch_and_decode(cpu_state,mem);
+        let new_cpu_state = self.execute(cpu_state,mem);
+        // Perform logging, recording here...
+        *cpu_state = new_cpu_state
+    }
 
+	/// Fetch the next instruction and perform address resolution.
     pub fn fetch_and_decode(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
         cpu_state.instruction_register = mem.read8(cpu_state.pc).unwrap();
         cpu_state.decode_register = self.decode(cpu_state,mem);
         cpu_state.pc = cpu_state.pc + cpu_state.decode_register.info.len as u16;
     }
-    pub fn execute(self: &CpuExecutor, mut cpu_state: &CpuState, mut mem:&Memory) {
-    	
-    	// The state of the CPU after executing the current instruction.
-    	let mut new_cpu_state = cpu_state.clone();
-    	
-    	// Figure out which opcode is being executed.
-    	let ref decode_register = cpu_state.decode_register;
-    	match decode_register.info.opcode_class {
-    		
-    		// LDA (Load Accumulator)
-    		OpcodeClass::LDA => {
-    			new_cpu_state.a = decode_register.value_final.unwrap();
-    		},
-    		
-    		// LDX (Load X)
-    		OpcodeClass::LDX => {
-    			new_cpu_state.x = decode_register.value_final.unwrap();
-    		}
-    		
-    		// LDY (Load Y)
-    		OpcodeClass::LDY => {
-    			new_cpu_state.y = decode_register.value_final.unwrap();
-    		}
-    		
-    		// NOP (No Operation)
-    		OpcodeClass::NOP => {}
-    		
-			_ => panic!("Unrecognised opcode class")
-
-    	}
-    	
-    	new_cpu_state;
-    	
-    }
     
-    pub fn step(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
-        self.fetch_and_decode(cpu_state,mem);
-        self.execute(cpu_state,mem);
-    }
-
+    /// Perform address resolution, returning the info in a DecodeRegister.
     fn decode(self: &CpuExecutor, cpu_state: &CpuState, mem: &Memory) -> DecodeRegister {
         let mut dr = DecodeRegister {
             info : self.op_table[&cpu_state.instruction_register].clone(),
@@ -138,5 +112,43 @@ impl CpuExecutor {
 
         return dr;
     }
+    
+    /// Perform the current instruction, returning the CpuState after execution.
+    pub fn execute(self: &CpuExecutor, mut cpu_state: &CpuState, mut mem:&Memory) -> CpuState {
+    	
+    	// The state of the CPU after executing the current instruction.
+    	let mut new_cpu_state = cpu_state.clone();
+    	
+    	// Figure out which opcode is being executed.
+    	let ref decode_register = cpu_state.decode_register;
+    	match decode_register.info.opcode_class {
+    		
+    		// LDA (Load Accumulator)
+    		OpcodeClass::LDA => {
+    			new_cpu_state.a = decode_register.value_final.unwrap();
+    		},
+    		
+    		// LDX (Load X)
+    		OpcodeClass::LDX => {
+    			new_cpu_state.x = decode_register.value_final.unwrap();
+    		}
+    		
+    		// LDY (Load Y)
+    		OpcodeClass::LDY => {
+    			new_cpu_state.y = decode_register.value_final.unwrap();
+    		}
+    		
+    		// NOP (No Operation)
+    		OpcodeClass::NOP => {}
+    		
+    		// Default: not sure what this opcode is.
+			_ => panic!("Unrecognised opcode class")
+
+    	}
+    	
+    	// Expression returned is the updated cpu_state.
+    	new_cpu_state
+    }
+    
 }
 

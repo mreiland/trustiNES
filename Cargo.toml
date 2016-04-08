@@ -1,7 +1,11 @@
 [package]
 name = "trustines"
 version = "0.0.1"
-authors = ["ReconditePhreak <trustiNES@MichaelReiland.net>", "Metroids <Metroids@users.noreply.github.com>", "Nesis <llnesisll@gmail.com>", "SeraphLance <kbalbas@gmail.com>"]
+authors = ["ReconditePhreak <trustiNES@MichaelReiland.net>",
+           "Metroids <Metroids@users.noreply.github.com>",
+           "Nesis <llnesisll@gmail.com>",
+           "SeraphLance <kbalbas@gmail.com>",
+           "craigthelinguist <aaroncraig@protonmail.ch>"]
 
 [features]
 # no features by default
