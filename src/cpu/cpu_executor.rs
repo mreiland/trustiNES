@@ -121,28 +121,54 @@ impl CpuExecutor {
     	
     	// Figure out which opcode is being executed.
     	let ref decode_register = cpu_state.decode_register;
+    	
     	match decode_register.info.opcode_class {
+    		
+    		// ASL (Arithmetic Shift Left)
+    		OpcodeClass::ASL => {
+
+				// Shift accumulator to the left.
+				new_cpu_state.a = cpu_state.a << 1;
+				// Carry flag gets set to the most significant bit.
+				new_cpu_state.C = (128 & cpu_state.a) > 0;
+				// Set zero flag if result is 0.
+    			if new_cpu_state.a == 0 { new_cpu_state.Z = true }
+				
+    		},
     		
     		// LDA (Load Accumulator)
     		OpcodeClass::LDA => {
-    			new_cpu_state.a = decode_register.value_final.unwrap();
+    			new_cpu_state.a = decode_register.value_final.unwrap()
     		},
     		
     		// LDX (Load X)
     		OpcodeClass::LDX => {
-    			new_cpu_state.x = decode_register.value_final.unwrap();
-    		}
+    			new_cpu_state.x = decode_register.value_final.unwrap()
+    		},
     		
     		// LDY (Load Y)
     		OpcodeClass::LDY => {
-    			new_cpu_state.y = decode_register.value_final.unwrap();
-    		}
+    			new_cpu_state.y = decode_register.value_final.unwrap()
+    		},
+    		
+    		// LSR (Logical Shift Right)
+    		OpcodeClass::LSR => {
+    			
+    			// Shift accumulator to the right.
+    			new_cpu_state.a = cpu_state.a >> 1;
+    			// Carry flag gets set to the least significant bit.
+    			new_cpu_state.C = 1 & cpu_state.a > 0;
+    			// Set zero flag if result is 0.
+    			if new_cpu_state.a == 0 { new_cpu_state.Z = true }
+    			
+    			
+    		},
     		
     		// NOP (No Operation)
-    		OpcodeClass::NOP => {}
+    		OpcodeClass::NOP => {},
     		
     		// Default: not sure what this opcode is.
-			_ => panic!("Unrecognised opcode class")
+			_ => panic!("Unrecognised opcode class: {:?}", decode_register.info.opcode_class)
 
     	}
     	
