@@ -22,6 +22,16 @@ impl Memory {
         unsafe { &m.mem.set_len(::std::u16::MAX as usize); }
         return m;
     }
+
+    // meant for a 'raw' write interface, not meant to be used by the 6502 processor itself, more
+    // tests and other tools to be able to read blocks of memory quickly and easily
+    //
+    pub fn write(self:&mut Memory, index:usize, inp: &[u8]) {
+        if inp.len() + index > self.mem.len() {
+            panic!("memory vec length is {}, input array goes from {} to {}",self.mem.len(),index,inp.len()+index)
+        }
+        &self.mem[index..(index+inp.len())].clone_from_slice(inp);
+    }
     pub fn read8(self:&Memory,addr: u16) -> Result<u8,MemoryError> {
         match self.resolve_address(addr) {
             Ok(raddr) => Ok(self.mem[raddr]),
