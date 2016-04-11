@@ -1,6 +1,6 @@
 extern crate trustines;
 
-mod memory_tests {
+mod memory {
     use trustines::memory::Memory;
 
     #[test]
