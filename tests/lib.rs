@@ -18,8 +18,7 @@ mod memory {
     #[test]
     fn read8_basic() {
         let mut m = Memory::new();
-        m.mem[0] = 5;
-        m.mem[1] = 10;
+        m.write(0,&[5,10]);
         assert_eq!(5,m.read8(0).unwrap());
         assert_eq!(10,m.read8(1).unwrap());
     }
@@ -37,9 +36,7 @@ mod memory {
     #[test]
     fn read16_basic() {
         let mut m = Memory::new();
-        m.mem[0] = 2;
-        m.mem[1] = 1;
-        m.mem[2] = 0;
+        m.write(0,&[2,1,0]);
         assert_eq!(258,m.read16(0).unwrap());
         assert_eq!(1,m.read16(1).unwrap());
     }
