@@ -52,12 +52,12 @@ pub fn load_from_file<P:AsRef<Path>>(file_path: P) -> Result<(Vec<OpcodeExecInfo
         let (opcode_string,name,address_mode_name,len,cycles,page_cycles,notes) : (String,String,String,u8,u8,u8,String) = rec.unwrap();
         let opcode = try!(u8::from_str_radix(&opcode_string[2..],16)); // from_str_radix won't parse 0x
 
-        let mut debug_info = OpcodeDebugInfo { opcode : opcode, name : name.clone(), address_mode_name : address_mode_name.trim().to_string(), notes : notes, };
+        let debug_info = OpcodeDebugInfo { opcode : opcode, name : name.clone(), address_mode_name : address_mode_name.trim().to_string(), notes : notes, };
 
         let address_mode = try!(debug_info.address_mode_name.parse::<address_mode::AddressMode>());
         let opcode_class = try!(name.trim().to_string().parse::<opcode_class::OpcodeClass>());
 
-        let mut exec_info = OpcodeExecInfo { opcode: opcode, len: len, cycles: cycles, page_cycles: page_cycles, address_mode: address_mode,opcode_class:opcode_class };
+        let exec_info = OpcodeExecInfo { opcode: opcode, len: len, cycles: cycles, page_cycles: page_cycles, address_mode: address_mode,opcode_class:opcode_class };
 
         debug_info_hash.push(debug_info);
         exec_info_hash.push(exec_info);
