@@ -2,6 +2,18 @@ extern crate trustines;
 
 mod memory {
     use trustines::memory::Memory;
+    #[test]
+    fn write() {
+        let mut m = Memory::new();
+        m.write(0, &[0,1,2]);
+        assert_eq!(0,m.read8(0).unwrap());
+        assert_eq!(1,m.read8(1).unwrap());
+        assert_eq!(2,m.read8(2).unwrap());
+        m.write(1, &[3]);
+        assert_eq!(0,m.read8(0).unwrap());
+        assert_eq!(3,m.read8(1).unwrap());
+        assert_eq!(2,m.read8(2).unwrap());
+    }
 
     #[test]
     fn read8_basic() {
