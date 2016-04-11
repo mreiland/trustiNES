@@ -27,6 +27,7 @@ mod memory {
         let mut m = Memory::new();
         m.mem[0] = 2;
         m.mem[1] = 1;
+        m.mem[2] = 0;
         assert_eq!(258,m.read16(0).unwrap());
         assert_eq!(1,m.read16(1).unwrap());
     }
