@@ -57,44 +57,78 @@ mod memory {
 }
 
 mod address_mode {
+    use trustines::cpu;
+    use trustines::memory::Memory;
+
+    fn build_executor() -> cpu::CpuExecutor {
+        let opcode_info = cpu::opcode::load_from_file("resources/opcodes.csv").unwrap();
+        return cpu::CpuExecutor::new(opcode_info.0);
+    }
+
     #[test]
     fn absolute() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn absolute_x() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn absolute_y() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn accumulator() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn immediate() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn implied() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn indirect() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn indexed_indirect() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn indirect_indexed() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn relative() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn zeropage() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn zeropage_x() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
     #[test]
     fn zeropage_y() {
+        let exec = build_executor();
+        let mut m = Memory::new();
     }
 }
 
