@@ -55,3 +55,45 @@ mod memory {
     }
 }
 
+mod address_mode {
+    #[test]
+    fn absolute() {
+    }
+    #[test]
+    fn absolute_x() {
+    }
+    #[test]
+    fn absolute_y() {
+    }
+    #[test]
+    fn accumulator() {
+    }
+    #[test]
+    fn immediate() {
+    }
+    #[test]
+    fn implied() {
+    }
+    #[test]
+    fn indirect() {
+    }
+    #[test]
+    fn indexed_indirect() {
+    }
+    #[test]
+    fn indirect_indexed() {
+    }
+    #[test]
+    fn relative() {
+    }
+    #[test]
+    fn zeropage() {
+    }
+    #[test]
+    fn zeropage_x() {
+    }
+    #[test]
+    fn zeropage_y() {
+    }
+}
+
