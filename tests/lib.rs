@@ -94,12 +94,22 @@ mod address_mode {
         let mut cpu: cpu::CpuState = Default::default();
         let mut mem = build_memory(0x0A,0, &[]);// 0x0A = ASL Accumulator
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x0A);
     }
     #[test]
     fn immediate() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x69,0, &[]);// 0x69 = ADC Immediate
+        let mut mem = build_memory(0x69,0, &[]);// 0x69 = ADC Immediate
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x69);
     }
     #[test]
     fn implied() {
