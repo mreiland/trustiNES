@@ -117,8 +117,13 @@ mod address_mode {
     #[test]
     fn implied() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x00,0, &[]);// 0x00 = BRK Implied
+        let mut mem = build_memory(0x00,0, &[]);// 0x00 = BRK Implied
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x00);
     }
 
 // ------------------ Non-Indexed, Memory ------------------ //
