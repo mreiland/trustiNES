@@ -73,8 +73,12 @@ mod address_mode {
         let opcode_info = cpu::opcode::load_from_file("resources/opcodes.csv").unwrap();
         return cpu::CpuExecutor::new(opcode_info.0);
     }
-    fn build_memory(instr:u8,ops: &[u8]) -> Memory {
-        return Memory::new();
+    fn build_memory(instr:u8,index:usize, ops: &[u8]) -> Memory {
+        let mut m = Memory::new();
+        if ops.len() > 0 {
+            m.write(index,ops);
+        }
+        return m;
     }
 
     // NOTE: the opcodes specified in build_memory are not being exucuted, so the
@@ -85,67 +89,67 @@ mod address_mode {
     #[test]
     fn absolute() {
         let exec = build_executor();
-        let mut m = build_memory(0x6D,&[]); //0x6D = ADC Absolute
+        let mut m = build_memory(0x6D,0, &[]); //0x6D = ADC Absolute
     }
     #[test]
     fn absolute_x() {
         let exec = build_executor();
-        let mut m = build_memory(0x7D,&[]); // 0x7D = ADC AbsoluteX
+        let mut m = build_memory(0x7D,0, &[]); // 0x7D = ADC AbsoluteX
     }
     #[test]
     fn absolute_y() {
         let exec = build_executor();
-        let mut m = build_memory(0x79,&[]);// 0x79 = ADC AbsoluteY
+        let mut m = build_memory(0x79,0, &[]);// 0x79 = ADC AbsoluteY
     }
     #[test]
     fn accumulator() {
         let exec = build_executor();
-        let mut m = build_memory(0x0A,&[]);// 0x0A = ASL Accumulator
+        let mut m = build_memory(0x0A,0, &[]);// 0x0A = ASL Accumulator
     }
     #[test]
     fn immediate() {
         let exec = build_executor();
-        let mut m = build_memory(0x69,&[]);// 0x69 = ADC Immediate
+        let mut m = build_memory(0x69,0, &[]);// 0x69 = ADC Immediate
     }
     #[test]
     fn implied() {
         let exec = build_executor();
-        let mut m = build_memory(0x00,&[]);// 0x00 = BRK Implied
+        let mut m = build_memory(0x00,0, &[]);// 0x00 = BRK Implied
     }
     #[test]
     fn indirect() {
         let exec = build_executor();
-        let mut m = build_memory(0x6C,&[]);// 0x6C = JMP Indirect
+        let mut m = build_memory(0x6C,0, &[]);// 0x6C = JMP Indirect
     }
     #[test]
     fn indexed_indirect() {
         let exec = build_executor();
-        let mut m = build_memory(0x61,&[]);// 0x61 = ADC IndexedIndirect
+        let mut m = build_memory(0x61,0, &[]);// 0x61 = ADC IndexedIndirect
     }
     #[test]
     fn indirect_indexed() {
         let exec = build_executor();
-        let mut m = build_memory(0x71,&[]);// 0x71 = ADC IndirectIndexed
+        let mut m = build_memory(0x71,0, &[]);// 0x71 = ADC IndirectIndexed
     }
     #[test]
     fn relative() {
         let exec = build_executor();
-        let mut m = build_memory(0x90,&[]);// 0x90 = BCC IndirectIndexed
+        let mut m = build_memory(0x90,0, &[]);// 0x90 = BCC IndirectIndexed
     }
     #[test]
     fn zeropage() {
         let exec = build_executor();
-        let mut m = build_memory(0x65,&[]);// 0x65 = ADC IndirectIndexed
+        let mut m = build_memory(0x65,0, &[]);// 0x65 = ADC IndirectIndexed
     }
     #[test]
     fn zeropage_x() {
         let exec = build_executor();
-        let mut m = build_memory(0x75,&[]);// 0x75 = ADC IndirectIndexed
+        let mut m = build_memory(0x75,0, &[]);// 0x75 = ADC IndirectIndexed
     }
     #[test]
     fn zeropage_y() {
         let exec = build_executor();
-        let mut m = build_memory(0xB6,&[]);// 0xB6 = LDX IndirectIndexed
+        let mut m = build_memory(0xB6,0, &[]);// 0xB6 = LDX IndirectIndexed
     }
 }
 
