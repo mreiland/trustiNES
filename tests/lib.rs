@@ -131,26 +131,46 @@ mod address_mode {
     #[test]
     fn absolute() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x6D,0, &[]); //0x6D = ADC Absolute
+        let mut mem = build_memory(0x6D,0, &[]); //0x6D = ADC Absolute
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x6D);
     }
     #[test]
     fn indirect() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x6C,0, &[]);// 0x6C = JMP Indirect
+        let mut mem = build_memory(0x6C,0, &[]);// 0x6C = JMP Indirect
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x6C);
     }
     #[test]
     fn relative() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x90,0, &[]);// 0x90 = BCC IndirectIndexed
+        let mut mem = build_memory(0x90,0, &[]);// 0x90 = BCC IndirectIndexed
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x90);
     }
     #[test]
     fn zeropage() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x65,0, &[]);// 0x65 = ADC IndirectIndexed
+        let mut mem = build_memory(0x65,0, &[]);// 0x65 = ADC IndirectIndexed
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x65);
     }
     
 // ------------------ Indexed, Memory ------------------ //
@@ -158,41 +178,68 @@ mod address_mode {
     #[test]
     fn absolute_x() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x7D,0, &[]); // 0x7D = ADC AbsoluteX
+        let mut mem = build_memory(0x7D,0, &[]); // 0x7D = ADC AbsoluteX
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x7D);
     }
     #[test]
     fn absolute_y() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x79,0, &[]);// 0x79 = ADC AbsoluteY
+        let mut mem = build_memory(0x79,0, &[]);// 0x79 = ADC AbsoluteY
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x79);
     }
     #[test]
     fn zeropage_x() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x75,0, &[]);// 0x75 = ADC IndirectIndexed
+        let mut mem = build_memory(0x75,0, &[]);// 0x75 = LDX ZeroPageX
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x75);
     }
     #[test]
     fn zeropage_y() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0xB6,0, &[]);// 0xB6 = LDX IndirectIndexed
+        let mut mem = build_memory(0xB6,0, &[]);// 0xB6 = LDX IndirectIndexed
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0xB6);
     }
     #[test]
     fn indexed_indirect() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x61,0, &[]);// 0x61 = ADC IndexedIndirect
+        let mut mem = build_memory(0x61,0, &[]);// 0x61 = ADC IndexedIndirect
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x61);
     }
     #[test]
     fn indirect_indexed() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x71,0, &[]);// 0x71 = ADC IndirectIndexed
+        let mut mem = build_memory(0x71,0, &[]);// 0x71 = ADC IndirectIndexed
         let exec = build_executor();
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x71);
     }
-
-
-
 }
 
