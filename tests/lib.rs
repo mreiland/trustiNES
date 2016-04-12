@@ -73,10 +73,11 @@ mod address_mode {
         let opcode_info = cpu::opcode::load_from_file("resources/opcodes.csv").unwrap();
         return cpu::CpuExecutor::new(opcode_info.0);
     }
-    fn build_memory(instr:u8,index:usize, ops: &[u8]) -> Memory {
+    fn build_memory(instr:u8,index:u16, ops: &[u8]) -> Memory {
         let mut m = Memory::new();
+        m.write8(index,instr);
         if ops.len() > 0 {
-            m.write(index,ops);
+            m.write(index+1,ops);
         }
         return m;
     }
@@ -91,7 +92,7 @@ mod address_mode {
     #[test]
     fn accumulator() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut m = build_memory(0x0A,0, &[]);// 0x0A = ASL Accumulator
+        let mut mem = build_memory(0x0A,0, &[]);// 0x0A = ASL Accumulator
         let exec = build_executor();
     }
     #[test]
