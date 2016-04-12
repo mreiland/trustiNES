@@ -75,11 +75,14 @@ mod address_mode {
     }
     fn build_memory(instr:u8,index:u16, ops: &[u8]) -> Memory {
         let mut m = Memory::new();
+        update_memory(&mut m,instr,index,ops);
+        return m;
+    }
+    fn update_memory(m:&mut Memory, instr:u8,index:u16, ops: &[u8]) {
         m.write8(index,instr);
         if ops.len() > 0 {
             m.write(index+1,ops);
         }
-        return m;
     }
 
     // NOTE: the opcodes specified in build_memory are not being executed, so the
