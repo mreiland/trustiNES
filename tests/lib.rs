@@ -88,68 +88,81 @@ mod address_mode {
 
     #[test]
     fn absolute() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x6D,0, &[]); //0x6D = ADC Absolute
+        let exec = build_executor();
     }
     #[test]
     fn absolute_x() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x7D,0, &[]); // 0x7D = ADC AbsoluteX
+        let exec = build_executor();
     }
     #[test]
     fn absolute_y() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x79,0, &[]);// 0x79 = ADC AbsoluteY
+        let exec = build_executor();
     }
     #[test]
     fn accumulator() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x0A,0, &[]);// 0x0A = ASL Accumulator
+        let exec = build_executor();
     }
     #[test]
     fn immediate() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x69,0, &[]);// 0x69 = ADC Immediate
+        let exec = build_executor();
     }
     #[test]
     fn implied() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x00,0, &[]);// 0x00 = BRK Implied
+        let exec = build_executor();
     }
     #[test]
     fn indirect() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x6C,0, &[]);// 0x6C = JMP Indirect
+        let exec = build_executor();
     }
     #[test]
     fn indexed_indirect() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x61,0, &[]);// 0x61 = ADC IndexedIndirect
+        let exec = build_executor();
     }
     #[test]
     fn indirect_indexed() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x71,0, &[]);// 0x71 = ADC IndirectIndexed
+        let exec = build_executor();
     }
     #[test]
     fn relative() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x90,0, &[]);// 0x90 = BCC IndirectIndexed
+        let exec = build_executor();
     }
     #[test]
     fn zeropage() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x65,0, &[]);// 0x65 = ADC IndirectIndexed
+        let exec = build_executor();
     }
     #[test]
     fn zeropage_x() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0x75,0, &[]);// 0x75 = ADC IndirectIndexed
+        let exec = build_executor();
     }
     #[test]
     fn zeropage_y() {
-        let exec = build_executor();
+        let mut cpu: CpuState = Default::default();
         let mut m = build_memory(0xB6,0, &[]);// 0xB6 = LDX IndirectIndexed
+        let exec = build_executor();
     }
 }
 
