@@ -100,11 +100,11 @@ impl CpuExecutor {
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
             AddressMode::ZeroPageX       => {
-                dr.addr_final  = Some( ((mem.read8(cpu_state.pc+1).unwrap() + cpu_state.x) % 255) as u16);
+                dr.addr_final  = Some( (mem.read8(cpu_state.pc+1).unwrap() as u16 + cpu_state.x as u16) % 255);
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
             AddressMode::ZeroPageY       => {
-                dr.addr_final  = Some( ((mem.read8(cpu_state.pc+1).unwrap() + cpu_state.y) % 255) as u16);
+                dr.addr_final  = Some( (mem.read8(cpu_state.pc+1).unwrap() as u16 + cpu_state.y as u16) % 255);
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
             _ => panic!("unrecognized addressing mode while decoding instruction_register!")
