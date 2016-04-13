@@ -15,7 +15,6 @@ mod memory {
         assert_eq!(3,m.read8(1).unwrap());
         assert_eq!(2,m.read8(2).unwrap());
     }
-
     #[test]
     fn read8_basic() {
         let mut m = Memory::new();
@@ -33,7 +32,6 @@ mod memory {
         assert_eq!(5,m.mem[0]);
         assert_eq!(10,m.mem[1]);
     }
-
     #[test]
     fn read16_basic() {
         let mut m = Memory::new();
@@ -96,15 +94,8 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x0A);
-
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ASL => {},
-            _ => panic!("Expected ASL opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::Accumulator => {},
-            _ => panic!("Expected Accumulator address mode")
-        }
+        assert_eq!(OpcodeClass::ASL,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::Accumulator,cpu.decode_register.info.address_mode);
     }
     #[test]
     fn immediate() {
@@ -118,15 +109,8 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x69);
-
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::Immediate => {},
-            _ => panic!("Expected Immediate address mode")
-        }
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::Immediate,cpu.decode_register.info.address_mode);
     }
     #[test]
     fn implied() {
@@ -140,15 +124,8 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x00);
-
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::BRK => {},
-            _ => panic!("Expected BRK opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::Implied => {},
-            _ => panic!("Expected Implied address mode")
-        }
+        assert_eq!(OpcodeClass::BRK,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::Implied,cpu.decode_register.info.address_mode);
     }
 
 // ------------------ Non-Indexed, Memory ------------------ //
@@ -168,15 +145,8 @@ mod address_mode {
         let s = OpcodeClass::ADC;
 
         assert_eq!(0x6D,cpu.instruction_register);
-
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::Absolute => {},
-            _ => panic!("Expected Absolute address mode")
-        }
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::Absolute,cpu.decode_register.info.address_mode);
 
         assert_eq!(300,cpu.decode_register.addr_final.unwrap());
         assert_eq!(5,cpu.decode_register.value_final.unwrap());
@@ -195,15 +165,8 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x6C);
-
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::JMP => {},
-            _ => panic!("Expected JMP opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::Indirect => {},
-            _ => panic!("Expected Indirect address mode")
-        }
+        assert_eq!(OpcodeClass::JMP,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::Indirect,cpu.decode_register.info.address_mode);
 
         assert_eq!(300,cpu.decode_register.addr_intermediate.unwrap());
         assert_eq!(500,cpu.decode_register.addr_final.unwrap());
@@ -221,15 +184,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x90);
+        assert_eq!(OpcodeClass::BCC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::Relative,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::BCC => {},
-            _ => panic!("Expected BCC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::Relative => {},
-            _ => panic!("Expected Relative address mode")
-        }
         assert_eq!(1,cpu.decode_register.addr_final.unwrap());
         assert_eq!(100,cpu.decode_register.value_final.unwrap());
     }
@@ -247,15 +204,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x65);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::ZeroPage,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::ZeroPage => {},
-            _ => panic!("Expected ZeroPage address mode")
-        }
         assert_eq!(100,cpu.decode_register.addr_final.unwrap());
         assert_eq!(5,cpu.decode_register.value_final.unwrap());
     }
@@ -277,15 +228,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x7D);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::AbsoluteX,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::AbsoluteX => {},
-            _ => panic!("Expected AbsoluteX address mode")
-        }
         assert_eq!(305,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
@@ -308,15 +253,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x7D);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::AbsoluteX,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::AbsoluteX => {},
-            _ => panic!("Expected AbsoluteX address mode")
-        }
         assert_eq!(u16MAX-1,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
@@ -337,15 +276,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x7D);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::AbsoluteX,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::AbsoluteX => {},
-            _ => panic!("Expected AbsoluteX address mode")
-        }
         assert_eq!(0,cpu.decode_register.addr_final.unwrap());
         assert_eq!(0x7D,cpu.decode_register.value_final.unwrap());
 
@@ -366,15 +299,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x7D);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::AbsoluteX,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::AbsoluteX => {},
-            _ => panic!("Expected AbsoluteX address mode")
-        }
         assert_eq!(1,cpu.decode_register.addr_final.unwrap());
         assert_eq!(mem.read8(1).unwrap(),cpu.decode_register.value_final.unwrap());
     }
@@ -393,15 +320,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x79);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::AbsoluteY,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::AbsoluteY => {},
-            _ => panic!("Expected Absolutey address mode")
-        }
         assert_eq!(305,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
@@ -423,15 +344,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x79);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::AbsoluteY,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::AbsoluteY => {},
-            _ => panic!("Expected AbsoluteY address mode")
-        }
         assert_eq!(u16MAX-1,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
@@ -451,15 +366,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x79);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::AbsoluteY,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::AbsoluteY => {},
-            _ => panic!("Expected AbsoluteY address mode")
-        }
         assert_eq!(0,cpu.decode_register.addr_final.unwrap());
         assert_eq!(0x79,cpu.decode_register.value_final.unwrap());
 
@@ -480,20 +389,12 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x79);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::AbsoluteY,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::AbsoluteY => {},
-            _ => panic!("Expected AbsoluteY address mode")
-        }
         assert_eq!(1,cpu.decode_register.addr_final.unwrap());
         assert_eq!(mem.read8(1).unwrap(),cpu.decode_register.value_final.unwrap());
     }
-
-
     #[test]
     fn zeropage_x() {
         let mut cpu: cpu::CpuState = Default::default();
@@ -509,15 +410,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x75);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::ZeroPageX,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::ZeroPageX => {},
-            _ => panic!("Expected ZeroPageX address mode")
-        }
         assert_eq!(105,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
@@ -538,15 +433,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x75);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::ZeroPageX,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::ZeroPageX => {},
-            _ => panic!("Expected ZeroPageX address mode")
-        }
         assert_eq!((u8MAX-1) as u16,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
@@ -566,15 +455,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x75);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::ZeroPageX,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::ZeroPageX => {},
-            _ => panic!("Expected ZeroPageX address mode")
-        }
         assert_eq!(0,cpu.decode_register.addr_final.unwrap());
         assert_eq!(0x75,cpu.decode_register.value_final.unwrap());
     }
@@ -594,20 +477,12 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x75);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::ZeroPageX,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::ZeroPageX => {},
-            _ => panic!("Expected ZeroPageX address mode")
-        }
         assert_eq!(1,cpu.decode_register.addr_final.unwrap());
         assert_eq!(mem.read8(1).unwrap(),cpu.decode_register.value_final.unwrap());
     }
-
-
     #[test]
     fn zeropage_y() {
         let mut cpu: cpu::CpuState = Default::default();
@@ -623,15 +498,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0xB6);
+        assert_eq!(OpcodeClass::LDX,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::ZeroPageY,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::LDX => {},
-            _ => panic!("Expected LDX opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::ZeroPageY => {},
-            _ => panic!("Expected ZeroPageY address mode")
-        }
         assert_eq!(105,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
@@ -652,15 +521,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0xB6);
+        assert_eq!(OpcodeClass::LDX,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::ZeroPageY,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::LDX => {},
-            _ => panic!("Expected LDX opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::ZeroPageY => {},
-            _ => panic!("Expected ZeroPageY address mode")
-        }
         assert_eq!((u8MAX-1) as u16,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
@@ -680,15 +543,9 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0xB6);
+        assert_eq!(OpcodeClass::LDX,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::ZeroPageY,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::LDX => {},
-            _ => panic!("Expected LDX opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::ZeroPageY => {},
-            _ => panic!("Expected ZeroPageY address mode")
-        }
         assert_eq!(0,cpu.decode_register.addr_final.unwrap());
         assert_eq!(0xB6,cpu.decode_register.value_final.unwrap());
     }
@@ -708,20 +565,12 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0xB6);
+        assert_eq!(OpcodeClass::LDX,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::ZeroPageY,cpu.decode_register.info.address_mode);
 
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::LDX => {},
-            _ => panic!("Expected LDX opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::ZeroPageY => {},
-            _ => panic!("Expected ZeroPageY address mode")
-        }
         assert_eq!(1,cpu.decode_register.addr_final.unwrap());
         assert_eq!(mem.read8(1).unwrap(),cpu.decode_register.value_final.unwrap());
     }
-
-
     #[test]
     fn indexed_indirect() {
         let mut cpu: cpu::CpuState = Default::default();
@@ -734,15 +583,8 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x61);
-
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::IndexedIndirect => {},
-            _ => panic!("Expected IndexedIndirect address mode")
-        }
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::IndexedIndirect,cpu.decode_register.info.address_mode);
     }
     #[test]
     fn indirect_indexed() {
@@ -756,15 +598,8 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x71);
-
-        match cpu.decode_register.info.opcode_class {
-            OpcodeClass::ADC => {},
-            _ => panic!("Expected ADC opcode class")
-        }
-        match cpu.decode_register.info.address_mode {
-            AddressMode::IndirectIndexed => {},
-            _ => panic!("Expected IndirectIndexed address mode")
-        }
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::IndirectIndexed,cpu.decode_register.info.address_mode);
     }
 }
 
