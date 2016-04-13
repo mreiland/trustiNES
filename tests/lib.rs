@@ -68,6 +68,8 @@ mod memory {
 mod address_mode {
     use trustines::cpu;
     use trustines::memory::Memory;
+    use trustines::cpu::OpcodeClass;
+    use trustines::cpu::AddressMode;
 
     fn build_executor() -> cpu::CpuExecutor {
         let opcode_info = cpu::opcode::load_from_file("resources/opcodes.csv").unwrap();
@@ -133,11 +135,24 @@ mod address_mode {
         let mut cpu: cpu::CpuState = Default::default();
         let mut mem = build_memory(0x6D,0, &[]); //0x6D = ADC Absolute
         let exec = build_executor();
+        
+        //mem.write8(0,0x6D);
+        mem.write16(1,300);
+        mem.write8(300,5);
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
+        let s = OpcodeClass::ADC;
 
-        assert_eq!(cpu.instruction_register,0x6D);
+        assert_eq!(0x6D,cpu.instruction_register);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
+
+        assert_eq!(300,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(5,cpu.decode_register.value_final.unwrap());
     }
     #[test]
     fn indirect() {
@@ -145,10 +160,22 @@ mod address_mode {
         let mut mem = build_memory(0x6C,0, &[]);// 0x6C = JMP Indirect
         let exec = build_executor();
 
+        //mem.write8(0,0x6C);
+        mem.write16(1,300);
+        mem.write16(300,500);
+
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x6C);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::JMP => {},
+            _ => panic!("Expected JMP opcode class")
+        }
+
+        assert_eq!(300,cpu.decode_register.addr_intermediate.unwrap());
+        assert_eq!(500,cpu.decode_register.addr_final.unwrap());
     }
     #[test]
     fn relative() {
@@ -156,10 +183,19 @@ mod address_mode {
         let mut mem = build_memory(0x90,0, &[]);// 0x90 = BCC IndirectIndexed
         let exec = build_executor();
 
+        mem.write8(1,100);
+
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x90);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::BCC => {},
+            _ => panic!("Expected BCC opcode class")
+        }
+        assert_eq!(1,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(100,cpu.decode_register.value_final.unwrap());
     }
     #[test]
     fn zeropage() {
@@ -167,10 +203,19 @@ mod address_mode {
         let mut mem = build_memory(0x65,0, &[]);// 0x65 = ADC IndirectIndexed
         let exec = build_executor();
 
+        mem.write8(1,100);
+        mem.write8(100,5);
+
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x65);
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
+        assert_eq!(100,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(5,cpu.decode_register.value_final.unwrap());
     }
     
 // ------------------ Indexed, Memory ------------------ //
