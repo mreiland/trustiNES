@@ -49,23 +49,23 @@ impl Memory {
             Err(err) => Err(err)
         }
     }
-    pub fn write8(self:&mut Memory,addr: u16, val:u8) -> Option<MemoryError> {
+    pub fn write8(self:&mut Memory,addr: u16, val:u8) -> Result<(),MemoryError> {
         match self.resolve_address(addr) {
             Ok(raddr) => {
                 self.mem[raddr] = val;
-                Option::None
+                Ok(())
             },
-            Err(err) => Option::Some(err)
+            Err(err) => Err(err)
         }
     }
-    pub fn write16(self:&mut Memory,addr: u16, val:u16) -> Option<MemoryError> {
+    pub fn write16(self:&mut Memory,addr: u16, val:u16) -> Result<(),MemoryError> {
         match self.resolve_address(addr) {
             Ok(raddr) => {
                 // splices are exclusive on the upper range (half open)
                 (&mut self.mem[raddr..(raddr+2)]).write_u16::<LittleEndian>(val).unwrap();
-                Option::None
+                Ok(())
             },
-            Err(err) => Option::Some(err)
+            Err(err) => Err(err)
         }
     }
 
