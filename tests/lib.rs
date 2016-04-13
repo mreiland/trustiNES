@@ -297,7 +297,7 @@ mod address_mode {
         let exec = build_executor();
 
         // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = (!0 as u16);
+        let u16MAX = !0 as u16;
 
 
         // non wrap-around by 1
@@ -330,7 +330,7 @@ mod address_mode {
         let exec = build_executor();
 
         // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = (!0 as u16);
+        let u16MAX = !0 as u16;
 
         mem.write8(0,0x7D); // 0x7D = ADC AbsoluteX
         mem.write16(1,u16MAX-5);
@@ -360,7 +360,7 @@ mod address_mode {
         let exec = build_executor();
 
         // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = (!0 as u16);
+        let u16MAX = !0 as u16;
 
         mem.write8(0,0x7D); // 0x7D = ADC AbsoluteX
         mem.write16(1,u16MAX-4);
@@ -416,7 +416,7 @@ mod address_mode {
         let exec = build_executor();
 
         // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = (!0 as u16);
+        let u16MAX = !0 as u16;
 
         // non wrap-around by 1
         mem.write8(0,0x79); // 0x79 = ADC AbsoluteY
@@ -447,7 +447,7 @@ mod address_mode {
         let exec = build_executor();
 
         // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = (!0 as u16);
+        let u16MAX = !0 as u16;
 
         mem.write8(0,0x79); // 0x79 = ADC AbsoluteY
         mem.write16(1,u16MAX-5);
@@ -477,7 +477,7 @@ mod address_mode {
         let exec = build_executor();
 
         // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = (!0 as u16);
+        let u16MAX = !0 as u16;
 
         mem.write8(0,0x79); // 0x7D = ADC AbsoluteX
         mem.write16(1,u16MAX-4);
@@ -529,6 +529,93 @@ mod address_mode {
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
     #[test]
+    fn zeropage_x_non_wraparound_by_1() {
+        let mut cpu: cpu::CpuState = Default::default();
+        let mut mem = Memory::new();
+        let exec = build_executor();
+
+        let u8MAX = !0 as u8;
+
+        mem.write8(0,0x75); // 0x75 = ADC ZeroPageX
+        mem.write8(1,u8MAX-6);
+        mem.write8((u8MAX-1) as u16,50);
+
+        cpu.pc = 0;
+        cpu.x = 5;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x75);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::ZeroPageX => {},
+            _ => panic!("Expected ZeroPageX address mode")
+        }
+        assert_eq!((u8MAX-1) as u16,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(50,cpu.decode_register.value_final.unwrap());
+    }
+    #[test]
+    fn zeropage_x_wraparound_to_0() {
+        let mut cpu: cpu::CpuState = Default::default();
+        let mut mem = Memory::new();
+        let exec = build_executor();
+
+        let u8MAX = !0 as u8;
+
+        mem.write8(0,0x75); // 0x75 = ADC ZeroPageX
+        mem.write8(1,u8MAX-5);
+
+        cpu.pc = 0;
+        cpu.x = 5;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x75);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::ZeroPageX => {},
+            _ => panic!("Expected ZeroPageX address mode")
+        }
+        assert_eq!(0,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(0x75,cpu.decode_register.value_final.unwrap());
+    }
+    #[test]
+    fn zeropage_x_wraparound_to_1() {
+        let mut cpu: cpu::CpuState = Default::default();
+        let mut mem = Memory::new();
+        let exec = build_executor();
+
+        let u8MAX = !0 as u8;
+
+        mem.write8(0,0x75); // 0x75 = ADC ZeroPageX
+        mem.write8(1,u8MAX-4);
+
+        cpu.pc = 0;
+        cpu.x = 5;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x75);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::ZeroPageX => {},
+            _ => panic!("Expected ZeroPageX address mode")
+        }
+        assert_eq!(1,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(mem.read8(1).unwrap(),cpu.decode_register.value_final.unwrap());
+    }
+
+
+    #[test]
     fn zeropage_y() {
         let mut cpu: cpu::CpuState = Default::default();
         let mut mem = Memory::new();
@@ -555,6 +642,93 @@ mod address_mode {
         assert_eq!(105,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
+    #[test]
+    fn zeropage_y_non_wraparound_by_1() {
+        let mut cpu: cpu::CpuState = Default::default();
+        let mut mem = Memory::new();
+        let exec = build_executor();
+
+        let u8MAX = !0 as u8;
+
+        mem.write8(0,0xB6); // 0xB6 = LDX IndirectIndexed
+        mem.write8(1,u8MAX-6);
+        mem.write8((u8MAX-1) as u16,50);
+
+        cpu.pc = 0;
+        cpu.y = 5;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0xB6);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::LDX => {},
+            _ => panic!("Expected LDX opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::ZeroPageY => {},
+            _ => panic!("Expected ZeroPageY address mode")
+        }
+        assert_eq!((u8MAX-1) as u16,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(50,cpu.decode_register.value_final.unwrap());
+    }
+    #[test]
+    fn zeropage_y_wraparound_to_0() {
+        let mut cpu: cpu::CpuState = Default::default();
+        let mut mem = Memory::new();
+        let exec = build_executor();
+
+        let u8MAX = !0 as u8;
+
+        mem.write8(0,0xB6); // 0xB6 = LDX IndirectIndexed
+        mem.write8(1,u8MAX-5);
+
+        cpu.pc = 0;
+        cpu.y = 5;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0xB6);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::LDX => {},
+            _ => panic!("Expected LDX opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::ZeroPageY => {},
+            _ => panic!("Expected ZeroPageY address mode")
+        }
+        assert_eq!(0,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(0xB6,cpu.decode_register.value_final.unwrap());
+    }
+    #[test]
+    fn zeropage_y_wraparound_to_1() {
+        let mut cpu: cpu::CpuState = Default::default();
+        let mut mem = Memory::new();
+        let exec = build_executor();
+
+        let u8MAX = !0 as u8;
+
+        mem.write8(0,0xB6); // 0xB6 = LDX IndirectIndexed
+        mem.write8(1,u8MAX-4);
+
+        cpu.pc = 0;
+        cpu.y = 5;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0xB6);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::LDX => {},
+            _ => panic!("Expected LDX opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::ZeroPageY => {},
+            _ => panic!("Expected ZeroPageY address mode")
+        }
+        assert_eq!(1,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(mem.read8(1).unwrap(),cpu.decode_register.value_final.unwrap());
+    }
+
+
     #[test]
     fn indexed_indirect() {
         let mut cpu: cpu::CpuState = Default::default();
