@@ -296,9 +296,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = !0 as u16;
-
+        let u16MAX = ::std::u16::MAX;
 
         // non wrap-around by 1
         mem.write8(0,0x7D); // 0x7D = ADC AbsoluteX
@@ -329,8 +327,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = !0 as u16;
+        let u16MAX = ::std::u16::MAX;
 
         mem.write8(0,0x7D); // 0x7D = ADC AbsoluteX
         mem.write16(1,u16MAX-5);
@@ -359,8 +356,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = !0 as u16;
+        let u16MAX = ::std::u16::MAX;
 
         mem.write8(0,0x7D); // 0x7D = ADC AbsoluteX
         mem.write16(1,u16MAX-4);
@@ -415,8 +411,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = !0 as u16;
+        let u16MAX = ::std::u16::MAX;
 
         // non wrap-around by 1
         mem.write8(0,0x79); // 0x79 = ADC AbsoluteY
@@ -446,8 +441,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = !0 as u16;
+        let u16MAX = ::std::u16::MAX;
 
         mem.write8(0,0x79); // 0x79 = ADC AbsoluteY
         mem.write16(1,u16MAX-5);
@@ -476,8 +470,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        // for some reason std::u16::MAX is not available here, so we work around it...
-        let u16MAX = !0 as u16;
+        let u16MAX = ::std::u16::MAX;
 
         mem.write8(0,0x79); // 0x7D = ADC AbsoluteX
         mem.write16(1,u16MAX-4);
@@ -534,7 +527,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        let u8MAX = !0 as u8;
+        let u8MAX = ::std::u8::MAX;
 
         mem.write8(0,0x75); // 0x75 = ADC ZeroPageX
         mem.write8(1,u8MAX-6);
@@ -563,7 +556,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        let u8MAX = !0 as u8;
+        let u8MAX = ::std::u8::MAX;
 
         mem.write8(0,0x75); // 0x75 = ADC ZeroPageX
         mem.write8(1,u8MAX-5);
@@ -591,7 +584,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        let u8MAX = !0 as u8;
+        let u8MAX = ::std::u8::MAX;
 
         mem.write8(0,0x75); // 0x75 = ADC ZeroPageX
         mem.write8(1,u8MAX-4);
@@ -648,7 +641,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        let u8MAX = !0 as u8;
+        let u8MAX = ::std::u8::MAX;
 
         mem.write8(0,0xB6); // 0xB6 = LDX IndirectIndexed
         mem.write8(1,u8MAX-6);
@@ -677,7 +670,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        let u8MAX = !0 as u8;
+        let u8MAX = ::std::u8::MAX;
 
         mem.write8(0,0xB6); // 0xB6 = LDX IndirectIndexed
         mem.write8(1,u8MAX-5);
@@ -705,7 +698,7 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
-        let u8MAX = !0 as u8;
+        let u8MAX = ::std::u8::MAX;
 
         mem.write8(0,0xB6); // 0xB6 = LDX IndirectIndexed
         mem.write8(1,u8MAX-4);
