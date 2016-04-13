@@ -111,6 +111,10 @@ mod address_mode {
             OpcodeClass::ASL => {},
             _ => panic!("Expected ASL opcode class")
         }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::Accumulator => {},
+            _ => panic!("Expected Accumulator address mode")
+        }
     }
     #[test]
     fn immediate() {
@@ -129,6 +133,10 @@ mod address_mode {
             OpcodeClass::ADC => {},
             _ => panic!("Expected ADC opcode class")
         }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::Immediate => {},
+            _ => panic!("Expected Immediate address mode")
+        }
     }
     #[test]
     fn implied() {
@@ -146,6 +154,10 @@ mod address_mode {
         match cpu.decode_register.info.opcode_class {
             OpcodeClass::BRK => {},
             _ => panic!("Expected BRK opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::Implied => {},
+            _ => panic!("Expected Implied address mode")
         }
     }
 
@@ -171,6 +183,10 @@ mod address_mode {
             OpcodeClass::ADC => {},
             _ => panic!("Expected ADC opcode class")
         }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::Absolute => {},
+            _ => panic!("Expected Absolute address mode")
+        }
 
         assert_eq!(300,cpu.decode_register.addr_final.unwrap());
         assert_eq!(5,cpu.decode_register.value_final.unwrap());
@@ -194,6 +210,10 @@ mod address_mode {
             OpcodeClass::JMP => {},
             _ => panic!("Expected JMP opcode class")
         }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::Indirect => {},
+            _ => panic!("Expected Indirect address mode")
+        }
 
         assert_eq!(300,cpu.decode_register.addr_intermediate.unwrap());
         assert_eq!(500,cpu.decode_register.addr_final.unwrap());
@@ -216,6 +236,10 @@ mod address_mode {
             OpcodeClass::BCC => {},
             _ => panic!("Expected BCC opcode class")
         }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::Relative => {},
+            _ => panic!("Expected Relative address mode")
+        }
         assert_eq!(1,cpu.decode_register.addr_final.unwrap());
         assert_eq!(100,cpu.decode_register.value_final.unwrap());
     }
@@ -236,6 +260,10 @@ mod address_mode {
         match cpu.decode_register.info.opcode_class {
             OpcodeClass::ADC => {},
             _ => panic!("Expected ADC opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::ZeroPage => {},
+            _ => panic!("Expected ZeroPage address mode")
         }
         assert_eq!(100,cpu.decode_register.addr_final.unwrap());
         assert_eq!(5,cpu.decode_register.value_final.unwrap());
