@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-#[derive(Clone,Debug)]
+#[derive(PartialEq,Clone,Debug)]
 pub enum AddressMode {
     None = 0,
     Absolute,        AbsoluteX,
