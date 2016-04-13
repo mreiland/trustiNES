@@ -75,17 +75,6 @@ mod address_mode {
         let opcode_info = cpu::opcode::load_from_file("resources/opcodes.csv").unwrap();
         return cpu::CpuExecutor::new(opcode_info.0);
     }
-    fn build_memory(instr:u8,index:u16, ops: &[u8]) -> Memory {
-        let mut m = Memory::new();
-        update_memory(&mut m,instr,index,ops);
-        return m;
-    }
-    fn update_memory(m:&mut Memory, instr:u8,index:u16, ops: &[u8]) {
-        m.write8(index,instr);
-        if ops.len() > 0 {
-            m.write(index+1,ops);
-        }
-    }
 
     // NOTE: the opcodes specified in build_memory are not being executed, so the
     //       opcode class (ADC, ASL, BRK, etc) don't actually matter.  What matters
@@ -257,6 +246,7 @@ mod address_mode {
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x65);
+
         match cpu.decode_register.info.opcode_class {
             OpcodeClass::ADC => {},
             _ => panic!("Expected ADC opcode class")
@@ -274,68 +264,134 @@ mod address_mode {
     #[test]
     fn absolute_x() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x7D,0, &[]); // 0x7D = ADC AbsoluteX
+        let mut mem = Memory::new();
         let exec = build_executor();
+
+        mem.write8(0,0x7D); // 0x7D = ADC AbsoluteX
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x7D);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::AbsoluteX => {},
+            _ => panic!("Expected AbsoluteX address mode")
+        }
     }
     #[test]
     fn absolute_y() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x79,0, &[]);// 0x79 = ADC AbsoluteY
+        let mut mem = Memory::new();
         let exec = build_executor();
+
+        mem.write8(0,0x79); // 0x79 = ADC AbsoluteY
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x79);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::AbsoluteY => {},
+            _ => panic!("Expected Absolutey address mode")
+        }
     }
     #[test]
     fn zeropage_x() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x75,0, &[]);// 0x75 = LDX ZeroPageX
+        let mut mem = Memory::new();
         let exec = build_executor();
+
+        mem.write8(0,0x75); // 0x75 = ADC ZeroPageX
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x75);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::ZeroPageX => {},
+            _ => panic!("Expected ZeroPageX address mode")
+        }
     }
     #[test]
     fn zeropage_y() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0xB6,0, &[]);// 0xB6 = LDX IndirectIndexed
+        let mut mem = Memory::new();
         let exec = build_executor();
+
+        mem.write8(0,0xB6); // 0xB6 = LDX IndirectIndexed
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0xB6);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::LDX => {},
+            _ => panic!("Expected LDX opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::ZeroPageY => {},
+            _ => panic!("Expected ZeroPageY address mode")
+        }
     }
     #[test]
     fn indexed_indirect() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x61,0, &[]);// 0x61 = ADC IndexedIndirect
+        let mut mem = Memory::new();
         let exec = build_executor();
+
+        mem.write8(0,0x61); // 0x61 = ADC IndexedIndirect
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x61);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::IndexedIndirect => {},
+            _ => panic!("Expected IndexedIndirect address mode")
+        }
     }
     #[test]
     fn indirect_indexed() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x71,0, &[]);// 0x71 = ADC IndirectIndexed
+        let mut mem = Memory::new();
         let exec = build_executor();
+
+        mem.write8(0,0x71); // 0x71 = ADC IndirectIndexed
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x71);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
+        match cpu.decode_register.info.address_mode {
+            AddressMode::IndirectIndexed => {},
+            _ => panic!("Expected IndirectIndexed address mode")
+        }
     }
 }
 
