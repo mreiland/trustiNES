@@ -97,35 +97,56 @@ mod address_mode {
     #[test]
     fn accumulator() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x0A,0, &[]);// 0x0A = ASL Accumulator
+        let mut mem = Memory::new();
         let exec = build_executor();
+
+        mem.write8(0,0x0A); // 0x0A = ASL Accumulator
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x0A);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ASL => {},
+            _ => panic!("Expected ASL opcode class")
+        }
     }
     #[test]
     fn immediate() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x69,0, &[]);// 0x69 = ADC Immediate
+        let mut mem = Memory::new();
         let exec = build_executor();
+
+        mem.write8(0,0x69); // 0x69 = ADC Immediate
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x69);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::ADC => {},
+            _ => panic!("Expected ADC opcode class")
+        }
     }
     #[test]
     fn implied() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x00,0, &[]);// 0x00 = BRK Implied
+        let mut mem = Memory::new();
         let exec = build_executor();
+
+        mem.write8(0,0x00); // 0x00 = BRK Implied
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x00);
+
+        match cpu.decode_register.info.opcode_class {
+            OpcodeClass::BRK => {},
+            _ => panic!("Expected BRK opcode class")
+        }
     }
 
 // ------------------ Non-Indexed, Memory ------------------ //
@@ -133,10 +154,10 @@ mod address_mode {
     #[test]
     fn absolute() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x6D,0, &[]); //0x6D = ADC Absolute
+        let mut mem = Memory::new();
         let exec = build_executor();
         
-        //mem.write8(0,0x6D);
+        mem.write8(0,0x6D); //0x6D = ADC Absolute
         mem.write16(1,300);
         mem.write8(300,5);
 
@@ -157,10 +178,10 @@ mod address_mode {
     #[test]
     fn indirect() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x6C,0, &[]);// 0x6C = JMP Indirect
+        let mut mem = Memory::new();
         let exec = build_executor();
 
-        //mem.write8(0,0x6C);
+        mem.write8(0,0x6C); // 0x6C = JMP Indirect
         mem.write16(1,300);
         mem.write16(300,500);
 
@@ -180,9 +201,10 @@ mod address_mode {
     #[test]
     fn relative() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x90,0, &[]);// 0x90 = BCC IndirectIndexed
+        let mut mem = Memory::new();
         let exec = build_executor();
 
+        mem.write8(0,0x90); // 0x90 = BCC IndirectIndexed
         mem.write8(1,100);
 
         cpu.pc = 0;
@@ -200,9 +222,10 @@ mod address_mode {
     #[test]
     fn zeropage() {
         let mut cpu: cpu::CpuState = Default::default();
-        let mut mem = build_memory(0x65,0, &[]);// 0x65 = ADC IndirectIndexed
+        let mut mem = Memory::new();
         let exec = build_executor();
 
+        mem.write8(0,0x65); // 0x65 = ADC IndirectIndexed
         mem.write8(1,100);
         mem.write8(100,5);
 
