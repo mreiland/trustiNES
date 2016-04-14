@@ -84,7 +84,7 @@ impl CpuExecutor {
                 dr.addr_final        = Some(mem.read16(dr.addr_intermediate.unwrap()).unwrap());
             },
             AddressMode::IndexedIndirect => {
-                dr.addr_intermediate = Some( ((mem.read8(cpu_state.pc+1).unwrap() as u32 + cpu_state.x as u32) % 65536 ) as u16);
+                dr.addr_intermediate = Some( (mem.read8(cpu_state.pc+1).unwrap() + cpu_state.x) as u16);
                 dr.addr_final        = Some(mem.read16(dr.addr_intermediate.unwrap()).unwrap());
                 dr.value_final       = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
