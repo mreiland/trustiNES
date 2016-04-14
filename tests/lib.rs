@@ -554,13 +554,21 @@ mod address_mode {
         let exec = build_executor();
 
         let _ = mem.write8(0,0x61); // 0x61 = ADC IndexedIndirect
+        let _ = mem.write8(1,5);
+        let _ = mem.write16(10,30);
+        let _ = mem.write8(30,15);
 
         cpu.pc = 0;
+        cpu.x = 5;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x61);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
         assert_eq!(AddressMode::IndexedIndirect,cpu.decode_register.info.address_mode);
+
+        assert_eq!(10,cpu.decode_register.addr_intermediate.unwrap());
+        assert_eq!(mem.read16(10).unwrap(),cpu.decode_register.addr_final.unwrap());
+        assert_eq!(15,cpu.decode_register.value_final.unwrap());
     }
     #[test]
     fn indirect_indexed() {
