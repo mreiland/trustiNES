@@ -553,10 +553,11 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
+        // ADC (5,X) where X = 5
         let _ = mem.write8(0,0x61); // 0x61 = ADC IndexedIndirect
         let _ = mem.write8(1,5);
-        let _ = mem.write16(10,30);
-        let _ = mem.write8(30,15);
+        let _ = mem.write16(10,300);
+        let _ = mem.write8(300,15);
 
         cpu.pc = 0;
         cpu.x = 5;
@@ -576,14 +577,98 @@ mod address_mode {
         let mut mem = Memory::new();
         let exec = build_executor();
 
+        // ADC (5,Y) where Y = 5
         let _ = mem.write8(0,0x71); // 0x71 = ADC IndirectIndexed
+        let _ = mem.write8(1,5);
+        let _ = mem.write16(5,300);
+        let _ = mem.write8(305,10);
 
         cpu.pc = 0;
+        cpu.y = 5;
         exec.fetch_and_decode(&mut cpu,&mut mem);
 
         assert_eq!(cpu.instruction_register,0x71);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
         assert_eq!(AddressMode::IndirectIndexed,cpu.decode_register.info.address_mode);
+
+        assert_eq!(5,cpu.decode_register.addr_init.unwrap());
+        assert_eq!(300,cpu.decode_register.addr_intermediate.unwrap());
+        assert_eq!(305,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(10,cpu.decode_register.value_final.unwrap());
+    }
+
+    #[test]
+    fn indirect_indexed_non_wraparound_by_1() {
+        let mut cpu: cpu::CpuState = Default::default();
+        let mut mem = Memory::new();
+        let exec = build_executor();
+
+        // ADC (5,Y) where Y = 5
+        let _ = mem.write8(0,0x71); // 0x71 = ADC IndirectIndexed
+        let _ = mem.write8(1,5);
+        let _ = mem.write16(5,u16::MAX-5);
+        let _ = mem.write8(u16::MAX,10);
+
+        cpu.pc = 0;
+        cpu.y = 5;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x71);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::IndirectIndexed,cpu.decode_register.info.address_mode);
+
+        assert_eq!(5,cpu.decode_register.addr_init.unwrap());
+        assert_eq!(u16::MAX-5,cpu.decode_register.addr_intermediate.unwrap());
+        assert_eq!(u16::MAX,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(10,cpu.decode_register.value_final.unwrap());
+    }
+    #[test]
+    fn indirect_indexed_wraparound_to_0() {
+        let mut cpu: cpu::CpuState = Default::default();
+        let mut mem = Memory::new();
+        let exec = build_executor();
+
+        // ADC (5,Y) where Y = 5
+        let _ = mem.write8(0,0x71); // 0x71 = ADC IndirectIndexed
+        let _ = mem.write8(1,5);
+        let _ = mem.write16(5,u16::MAX-4);
+
+        cpu.pc = 0;
+        cpu.y = 5;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x71);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::IndirectIndexed,cpu.decode_register.info.address_mode);
+
+        assert_eq!(5,cpu.decode_register.addr_init.unwrap());
+        assert_eq!(u16::MAX-4,cpu.decode_register.addr_intermediate.unwrap());
+        assert_eq!(0,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(0x71,cpu.decode_register.value_final.unwrap());
+    }
+    #[test]
+    fn indirect_indexed_wraparound_to_1() {
+        let mut cpu: cpu::CpuState = Default::default();
+        let mut mem = Memory::new();
+        let exec = build_executor();
+
+        // ADC (5,Y) where Y = 5
+        let _ = mem.write8(0,0x71); // 0x71 = ADC IndirectIndexed
+        let _ = mem.write8(1,5);
+        let _ = mem.write16(5,u16::MAX-3);
+
+        cpu.pc = 0;
+        cpu.y = 5;
+        exec.fetch_and_decode(&mut cpu,&mut mem);
+
+        assert_eq!(cpu.instruction_register,0x71);
+        assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::IndirectIndexed,cpu.decode_register.info.address_mode);
+
+        assert_eq!(5,cpu.decode_register.addr_init.unwrap());
+        assert_eq!(u16::MAX-3,cpu.decode_register.addr_intermediate.unwrap());
+        assert_eq!(1,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(5,cpu.decode_register.value_final.unwrap());
     }
 }
 
