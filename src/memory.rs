@@ -17,9 +17,9 @@ pub struct Memory {
 impl Memory {
     pub fn new() -> Memory {
         let mut m =  Memory {
-            mem: Vec::with_capacity(::std::u16::MAX as usize)
+            mem: Vec::with_capacity(::std::u16::MAX as usize +1)
         };
-        unsafe { &m.mem.set_len(::std::u16::MAX as usize); }
+        unsafe { &m.mem.set_len(::std::u16::MAX as usize +1); }
         return m;
     }
 
