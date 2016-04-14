@@ -242,8 +242,8 @@ mod address_mode {
 
         // non wrap-around by 1
         let _ = mem.write8(0,0x7D); // 0x7D = ADC AbsoluteX
-        let _ = mem.write16(1,u16::MAX-6);
-        let _ = mem.write8(u16::MAX-1,50);
+        let _ = mem.write16(1,u16::MAX-5);
+        let _ = mem.write8(u16::MAX,50);
 
         cpu.pc = 0;
         cpu.x = 5;
@@ -253,7 +253,7 @@ mod address_mode {
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
         assert_eq!(AddressMode::AbsoluteX,cpu.decode_register.info.address_mode);
 
-        assert_eq!(u16::MAX-1,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(u16::MAX,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
 
@@ -264,7 +264,7 @@ mod address_mode {
         let exec = build_executor();
 
         let _ = mem.write8(0,0x7D); // 0x7D = ADC AbsoluteX
-        let _ = mem.write16(1,u16::MAX-5);
+        let _ = mem.write16(1,u16::MAX-4);
 
         cpu.pc = 0;
         cpu.x = 5;
@@ -285,7 +285,7 @@ mod address_mode {
         let exec = build_executor();
 
         let _ = mem.write8(0,0x7D); // 0x7D = ADC AbsoluteX
-        let _ = mem.write16(1,u16::MAX-4);
+        let _ = mem.write16(1,u16::MAX-3);
 
         cpu.pc = 0;
         cpu.x = 5;
@@ -327,8 +327,8 @@ mod address_mode {
 
         // non wrap-around by 1
         let _ = mem.write8(0,0x79); // 0x79 = ADC AbsoluteY
-        let _ = mem.write16(1,u16::MAX-6);
-        let _ = mem.write8(u16::MAX-1,50);
+        let _ = mem.write16(1,u16::MAX-5);
+        let _ = mem.write8(u16::MAX,50);
 
         cpu.pc = 0;
         cpu.y = 5;
@@ -338,7 +338,7 @@ mod address_mode {
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
         assert_eq!(AddressMode::AbsoluteY,cpu.decode_register.info.address_mode);
 
-        assert_eq!(u16::MAX-1,cpu.decode_register.addr_final.unwrap());
+        assert_eq!(u16::MAX,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
     #[test]
@@ -348,7 +348,7 @@ mod address_mode {
         let exec = build_executor();
 
         let _ = mem.write8(0,0x79); // 0x79 = ADC AbsoluteY
-        let _ = mem.write16(1,u16::MAX-5);
+        let _ = mem.write16(1,u16::MAX-4);
 
         cpu.pc = 0;
         cpu.y = 5;
@@ -369,7 +369,7 @@ mod address_mode {
         let exec = build_executor();
 
         let _ = mem.write8(0,0x79); // 0x7D = ADC AbsoluteX
-        let _ = mem.write16(1,u16::MAX-4);
+        let _ = mem.write16(1,u16::MAX-3);
 
         cpu.pc = 0;
         cpu.y = 5;
@@ -411,8 +411,8 @@ mod address_mode {
 
 
         let _ = mem.write8(0,0x75); // 0x75 = ADC ZeroPageX
-        let _ = mem.write8(1,u8::MAX-6);
-        let _ = mem.write8((u8::MAX-1) as u16,50);
+        let _ = mem.write8(1,u8::MAX-5);
+        let _ = mem.write8((u8::MAX) as u16,50);
 
         cpu.pc = 0;
         cpu.x = 5;
@@ -422,7 +422,7 @@ mod address_mode {
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
         assert_eq!(AddressMode::ZeroPageX,cpu.decode_register.info.address_mode);
 
-        assert_eq!((u8::MAX-1) as u16,cpu.decode_register.addr_final.unwrap());
+        assert_eq!((u8::MAX) as u16,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
     #[test]
@@ -432,7 +432,7 @@ mod address_mode {
         let exec = build_executor();
 
         let _ = mem.write8(0,0x75); // 0x75 = ADC ZeroPageX
-        let _ = mem.write8(1,u8::MAX-5);
+        let _ = mem.write8(1,u8::MAX-4);
 
         cpu.pc = 0;
         cpu.x = 5;
@@ -452,7 +452,7 @@ mod address_mode {
         let exec = build_executor();
 
         let _ = mem.write8(0,0x75); // 0x75 = ADC ZeroPageX
-        let _ = mem.write8(1,u8::MAX-4);
+        let _ = mem.write8(1,u8::MAX-3);
 
         cpu.pc = 0;
         cpu.x = 5;
@@ -493,8 +493,8 @@ mod address_mode {
         let exec = build_executor();
 
         let _ = mem.write8(0,0xB6); // 0xB6 = LDX IndirectIndexed
-        let _ = mem.write8(1,u8::MAX-6);
-        let _ = mem.write8((u8::MAX-1) as u16,50);
+        let _ = mem.write8(1,u8::MAX-5);
+        let _ = mem.write8((u8::MAX) as u16,50);
 
         cpu.pc = 0;
         cpu.y = 5;
@@ -504,7 +504,7 @@ mod address_mode {
         assert_eq!(OpcodeClass::LDX,cpu.decode_register.info.opcode_class);
         assert_eq!(AddressMode::ZeroPageY,cpu.decode_register.info.address_mode);
 
-        assert_eq!((u8::MAX-1) as u16,cpu.decode_register.addr_final.unwrap());
+        assert_eq!((u8::MAX) as u16,cpu.decode_register.addr_final.unwrap());
         assert_eq!(50,cpu.decode_register.value_final.unwrap());
     }
     #[test]
@@ -514,7 +514,7 @@ mod address_mode {
         let exec = build_executor();
 
         let _ = mem.write8(0,0xB6); // 0xB6 = LDX IndirectIndexed
-        let _ = mem.write8(1,u8::MAX-5);
+        let _ = mem.write8(1,u8::MAX-4);
 
         cpu.pc = 0;
         cpu.y = 5;
@@ -534,7 +534,7 @@ mod address_mode {
         let exec = build_executor();
 
         let _ = mem.write8(0,0xB6); // 0xB6 = LDX IndirectIndexed
-        let _ = mem.write8(1,u8::MAX-4);
+        let _ = mem.write8(1,u8::MAX-3);
 
         cpu.pc = 0;
         cpu.y = 5;
