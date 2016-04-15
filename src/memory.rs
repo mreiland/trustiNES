@@ -1,6 +1,5 @@
 extern crate byteorder;
 use std::io::Cursor;
-use std::io::Write;
 use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
 
 #[derive(Debug)]

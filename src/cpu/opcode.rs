@@ -1,10 +1,8 @@
 extern crate csv;
 
-use std;
 use std::io;
 use std::path::Path;
 use std::num;
-use std::collections::HashMap;
 use cpu::common_defs::OpcodeExecInfo;
 use cpu::common_defs::OpcodeDebugInfo;
 use cpu::common_defs::opcode_class;
