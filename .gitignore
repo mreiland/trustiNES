@@ -4,6 +4,7 @@
 *.rlib
 *.dll
 *.swp
+resources/nestest.out
 
 # Executables
 *.exe
