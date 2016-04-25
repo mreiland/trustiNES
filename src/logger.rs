@@ -43,24 +43,24 @@ impl NesTest {
 
         match dr.info.address_mode {
             // no explicit addresses for the following modes
-            AddressMode::Accumulator  => { panic!("Accumulator addressing mode is unimplemented"); },
-            AddressMode::Implied      => { panic!("Implied addressing mode is unimplemented"); },
+            AddressMode::Accumulator  => { let _ = self.f.write(s.as_bytes()); panic!("Accumulator addressing mode is unimplemented"); },
+            AddressMode::Implied      => { let _ = self.f.write(s.as_bytes()); panic!("Implied addressing mode is unimplemented"); },
 
             //explicit addresses from here on out
             AddressMode::Absolute =>        {
                 s.push_str(&format!("{} ${:X}",info.name,mem.read16(pc+1).unwrap()));
             },
-            AddressMode::AbsoluteX       => { self.f.write(s.as_bytes()); panic!("AbsoluteX addressing mode is unimplemented"); },
-            AddressMode::AbsoluteY       => { self.f.write(s.as_bytes()); panic!("AbsoluteY addressing mode is unimplemented"); },
-            AddressMode::Immediate       => { self.f.write(s.as_bytes()); panic!("Immediate addressing mode is unimplemented"); },
-            AddressMode::Indirect        => { self.f.write(s.as_bytes()); panic!("Indirect addressing mode is unimplemented"); },
-            AddressMode::IndexedIndirect => { self.f.write(s.as_bytes()); panic!("IndexedIndirect addressing mode is unimplemented"); },
-            AddressMode::IndirectIndexed => { self.f.write(s.as_bytes()); panic!("IndirectIndexed addressing mode is unimplemented"); },
-            AddressMode::Relative        => { self.f.write(s.as_bytes()); panic!("Relative addressing mode is unimplemented"); },
-            AddressMode::ZeroPage        => { self.f.write(s.as_bytes()); panic!("ZeroPage addressing mode is unimplemented"); },
-            AddressMode::ZeroPageX       => { self.f.write(s.as_bytes()); panic!("ZeroPageX addressing mode is unimplemented"); },
-            AddressMode::ZeroPageY       => { self.f.write(s.as_bytes()); panic!("ZeroPageY addressing mode is unimplemented"); },
-            _ => { self.f.write(s.as_bytes()); panic!("unrecognized addressing mode") }
+            AddressMode::AbsoluteX       => { let _ = self.f.write(s.as_bytes()); panic!("AbsoluteX addressing mode is unimplemented"); },
+            AddressMode::AbsoluteY       => { let _ = self.f.write(s.as_bytes()); panic!("AbsoluteY addressing mode is unimplemented"); },
+            AddressMode::Immediate       => { let _ = self.f.write(s.as_bytes()); panic!("Immediate addressing mode is unimplemented"); },
+            AddressMode::Indirect        => { let _ = self.f.write(s.as_bytes()); panic!("Indirect addressing mode is unimplemented"); },
+            AddressMode::IndexedIndirect => { let _ = self.f.write(s.as_bytes()); panic!("IndexedIndirect addressing mode is unimplemented"); },
+            AddressMode::IndirectIndexed => { let _ = self.f.write(s.as_bytes()); panic!("IndirectIndexed addressing mode is unimplemented"); },
+            AddressMode::Relative        => { let _ = self.f.write(s.as_bytes()); panic!("Relative addressing mode is unimplemented"); },
+            AddressMode::ZeroPage        => { let _ = self.f.write(s.as_bytes()); panic!("ZeroPage addressing mode is unimplemented"); },
+            AddressMode::ZeroPageX       => { let _ = self.f.write(s.as_bytes()); panic!("ZeroPageX addressing mode is unimplemented"); },
+            AddressMode::ZeroPageY       => { let _ = self.f.write(s.as_bytes()); panic!("ZeroPageY addressing mode is unimplemented"); },
+            _ => { let _ = self.f.write(s.as_bytes()); panic!("unrecognized addressing mode") }
         }
         let len = s.len();
         s.push_str(&format!("{output:>0$}",48-len,output="")); // spacing
