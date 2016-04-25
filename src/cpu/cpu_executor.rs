@@ -124,49 +124,48 @@ impl CpuExecutor {
     	let ref decode_register = cpu_state.decode_register;
     	
     	match decode_register.info.opcode_class {
-    		
-    		// ASL (Arithmetic Shift Left)
+    		// Arithmetic Shift Left
     		OpcodeClass::ASL => {
-
-				// Shift accumulator to the left.
 				cpu_state.a = cpu_state.a << 1;
-				// Carry flag gets set to the most significant bit.
 				cpu_state.C = (128 & cpu_state.a) > 0;
-				// Set zero flag if result is 0.
-    			if cpu_state.a == 0 { cpu_state.Z = true }
+    			if cpu_state.a == 0 { cpu_state.Z = true; }
 				
+                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
     		},
-    		
-    		// LDA (Load Accumulator)
+    		// Load Accumulator
     		OpcodeClass::LDA => {
-    			cpu_state.a = decode_register.value_final.unwrap()
+    			cpu_state.a = decode_register.value_final.unwrap();
+                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
     		},
-    		
-    		// LDX (Load X)
+    		// Load X
     		OpcodeClass::LDX => {
-    			cpu_state.x = decode_register.value_final.unwrap()
+    			cpu_state.x = decode_register.value_final.unwrap();
+                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
     		},
-    		
-    		// LDY (Load Y)
+    		// Load Y
     		OpcodeClass::LDY => {
-    			cpu_state.y = decode_register.value_final.unwrap()
+    			cpu_state.y = decode_register.value_final.unwrap();
+                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
     		},
-    		
-    		// LSR (Logical Shift Right)
+    		// Logical Shift Right
     		OpcodeClass::LSR => {
-    			
-    			// Shift accumulator to the right.
     			cpu_state.a = cpu_state.a >> 1;
-    			// Carry flag gets set to the least significant bit.
     			cpu_state.C = 1 & cpu_state.a > 0;
-    			// Set zero flag if result is 0.
-    			if cpu_state.a == 0 { cpu_state.Z = true }
+    			if cpu_state.a == 0 { cpu_state.Z = true; }
     			
-    			
+                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
     		},
-    		
+    		// Jump
+    		OpcodeClass::JMP => {
+    			cpu_state.pc = decode_register.addr_final.unwrap();
+    		},
     		// NOP (No Operation)
     		OpcodeClass::NOP => {},
+    		// Store X
+    		OpcodeClass::STX => {
+                mem.write8(decode_register.addr_final.unwrap(),decode_register.value_final.unwrap());
+                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
+    		},
     		
     		// Default: not sure what this opcode is.
 			_ => panic!("Unrecognised opcode class: {:?}", decode_register.info.opcode_class)
