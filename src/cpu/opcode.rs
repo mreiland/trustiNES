@@ -71,7 +71,7 @@ pub fn load_from_file<P:AsRef<Path>>(file_path: P) -> Result<(Vec<OpcodeExecInfo
         }
         duplicate_check.push(opcode);
 
-        let debug_info = OpcodeDebugInfo { opcode : opcode, name : name.clone(), address_mode_name : address_mode_name.trim().to_string(), notes : notes, };
+        let debug_info = OpcodeDebugInfo { opcode : opcode, name : name.trim().to_string(), address_mode_name : address_mode_name.trim().to_string(), notes : notes, };
 
         let address_mode = try!(debug_info.address_mode_name.parse::<address_mode::AddressMode>());
         let opcode_class = try!(name.trim().to_string().parse::<opcode_class::OpcodeClass>());
