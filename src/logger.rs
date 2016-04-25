@@ -50,17 +50,17 @@ impl NesTest {
             AddressMode::Absolute =>        {
                 s.push_str(&format!("{} ${:X}",info.name,mem.read16(pc+1).unwrap()));
             },
-            AddressMode::AbsoluteX       => { panic!("AbsoluteX addressing mode is unimplemented"); },
-            AddressMode::AbsoluteY       => { panic!("AbsoluteY addressing mode is unimplemented"); },
-            AddressMode::Immediate       => { panic!("Immediate addressing mode is unimplemented"); },
-            AddressMode::Indirect        => { panic!("Indirect addressing mode is unimplemented"); },
-            AddressMode::IndexedIndirect => { panic!("IndexedIndirect addressing mode is unimplemented"); },
-            AddressMode::IndirectIndexed => { panic!("IndirectIndexed addressing mode is unimplemented"); },
-            AddressMode::Relative        => { panic!("Relative addressing mode is unimplemented"); },
-            AddressMode::ZeroPage        => { panic!("ZeroPage addressing mode is unimplemented"); },
-            AddressMode::ZeroPageX       => { panic!("ZeroPageX addressing mode is unimplemented"); },
-            AddressMode::ZeroPageY       => { panic!("ZeroPageY addressing mode is unimplemented"); },
-            _ => panic!("unrecognized addressing mode")
+            AddressMode::AbsoluteX       => { self.f.write(s.as_bytes()); panic!("AbsoluteX addressing mode is unimplemented"); },
+            AddressMode::AbsoluteY       => { self.f.write(s.as_bytes()); panic!("AbsoluteY addressing mode is unimplemented"); },
+            AddressMode::Immediate       => { self.f.write(s.as_bytes()); panic!("Immediate addressing mode is unimplemented"); },
+            AddressMode::Indirect        => { self.f.write(s.as_bytes()); panic!("Indirect addressing mode is unimplemented"); },
+            AddressMode::IndexedIndirect => { self.f.write(s.as_bytes()); panic!("IndexedIndirect addressing mode is unimplemented"); },
+            AddressMode::IndirectIndexed => { self.f.write(s.as_bytes()); panic!("IndirectIndexed addressing mode is unimplemented"); },
+            AddressMode::Relative        => { self.f.write(s.as_bytes()); panic!("Relative addressing mode is unimplemented"); },
+            AddressMode::ZeroPage        => { self.f.write(s.as_bytes()); panic!("ZeroPage addressing mode is unimplemented"); },
+            AddressMode::ZeroPageX       => { self.f.write(s.as_bytes()); panic!("ZeroPageX addressing mode is unimplemented"); },
+            AddressMode::ZeroPageY       => { self.f.write(s.as_bytes()); panic!("ZeroPageY addressing mode is unimplemented"); },
+            _ => { self.f.write(s.as_bytes()); panic!("unrecognized addressing mode") }
         }
         let len = s.len();
         s.push_str(&format!("{output:>0$}",48-len,output="")); // spacing
@@ -68,7 +68,7 @@ impl NesTest {
         s.push_str(&format!(" X:{:0>2X}",cpu_state.x));
         s.push_str(&format!(" Y:{:0>2X}",cpu_state.y));
         s.push_str(&format!(" P:{:0>2X}",cpu_state.unpack_flags()));
-        s.push_str(&format!(" SP:{:0>2X}",cpu_state.sp));
+        s.push_str(&format!(" SP:{:0>2X}\n",cpu_state.sp));
 
         self.f.write(s.as_bytes());
     }
