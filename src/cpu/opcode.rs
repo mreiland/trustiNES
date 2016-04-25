@@ -43,8 +43,15 @@ pub fn load_from_file<P:AsRef<Path>>(file_path: P) -> Result<(Vec<OpcodeExecInfo
     rdr = rdr.has_headers(true);
     rdr = rdr.flexible(false); // all records are the same length
 
-    let mut exec_info_hash = Vec::<OpcodeExecInfo>::new();
-    let mut debug_info_hash = Vec::<OpcodeDebugInfo>::new();
+    let max_opcode_num = 256;
+
+    let mut exec_info_vec = Vec::with_capacity(max_opcode_num);
+    let mut debug_info_vec = Vec::with_capacity(max_opcode_num);
+
+    unsafe {
+        exec_info_vec.set_len( max_opcode_num);
+        debug_info_vec.set_len(max_opcode_num);
+    }
 
     for rec in rdr.decode() {
         let (opcode_string,name,address_mode_name,len,cycles,page_cycles,notes) : (String,String,String,u8,u8,u8,String) = rec.unwrap();
@@ -57,9 +64,9 @@ pub fn load_from_file<P:AsRef<Path>>(file_path: P) -> Result<(Vec<OpcodeExecInfo
 
         let exec_info = OpcodeExecInfo { opcode: opcode, len: len, cycles: cycles, page_cycles: page_cycles, address_mode: address_mode,opcode_class:opcode_class };
 
-        debug_info_hash.push(debug_info);
-        exec_info_hash.push(exec_info);
+        debug_info_vec[opcode as usize] = debug_info;
+        exec_info_vec[opcode as usize] = exec_info;
     }
-    Ok((exec_info_hash,debug_info_hash))
+    Ok((exec_info_vec,debug_info_vec))
 }
 
