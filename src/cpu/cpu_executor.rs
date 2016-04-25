@@ -43,16 +43,13 @@ impl CpuExecutor {
     /// Execute a single instruction in the given memory and cpu_state context.
     pub fn step(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
         self.fetch_and_decode(cpu_state,mem);
-        let new_cpu_state = self.execute(cpu_state,mem);
-        // Perform logging, recording here...
-        *cpu_state = new_cpu_state
+        self.execute(cpu_state,mem);
     }
 
 	/// Fetch the next instruction and perform address resolution.
     pub fn fetch_and_decode(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
         cpu_state.instruction_register = mem.read8(cpu_state.pc).unwrap();
         cpu_state.decode_register = self.decode(cpu_state,mem);
-        //cpu_state.pc = cpu_state.pc + cpu_state.decode_register.info.len as u16;
         cpu_state.pc = cpu_state.pc+1;
     }
     
@@ -122,11 +119,7 @@ impl CpuExecutor {
     }
     
     /// Perform the current instruction, returning the CpuState after execution.
-    pub fn execute(self: &CpuExecutor, mut cpu_state: &CpuState, mut mem:&Memory) -> CpuState {
-    	
-    	// The state of the CPU after executing the current instruction.
-    	let mut new_cpu_state = cpu_state.clone();
-    	
+    pub fn execute(self: &CpuExecutor, cpu_state: &mut CpuState, mem:&mut Memory) {
     	// Figure out which opcode is being executed.
     	let ref decode_register = cpu_state.decode_register;
     	
@@ -136,38 +129,38 @@ impl CpuExecutor {
     		OpcodeClass::ASL => {
 
 				// Shift accumulator to the left.
-				new_cpu_state.a = cpu_state.a << 1;
+				cpu_state.a = cpu_state.a << 1;
 				// Carry flag gets set to the most significant bit.
-				new_cpu_state.C = (128 & cpu_state.a) > 0;
+				cpu_state.C = (128 & cpu_state.a) > 0;
 				// Set zero flag if result is 0.
-    			if new_cpu_state.a == 0 { new_cpu_state.Z = true }
+    			if cpu_state.a == 0 { cpu_state.Z = true }
 				
     		},
     		
     		// LDA (Load Accumulator)
     		OpcodeClass::LDA => {
-    			new_cpu_state.a = decode_register.value_final.unwrap()
+    			cpu_state.a = decode_register.value_final.unwrap()
     		},
     		
     		// LDX (Load X)
     		OpcodeClass::LDX => {
-    			new_cpu_state.x = decode_register.value_final.unwrap()
+    			cpu_state.x = decode_register.value_final.unwrap()
     		},
     		
     		// LDY (Load Y)
     		OpcodeClass::LDY => {
-    			new_cpu_state.y = decode_register.value_final.unwrap()
+    			cpu_state.y = decode_register.value_final.unwrap()
     		},
     		
     		// LSR (Logical Shift Right)
     		OpcodeClass::LSR => {
     			
     			// Shift accumulator to the right.
-    			new_cpu_state.a = cpu_state.a >> 1;
+    			cpu_state.a = cpu_state.a >> 1;
     			// Carry flag gets set to the least significant bit.
-    			new_cpu_state.C = 1 & cpu_state.a > 0;
+    			cpu_state.C = 1 & cpu_state.a > 0;
     			// Set zero flag if result is 0.
-    			if new_cpu_state.a == 0 { new_cpu_state.Z = true }
+    			if cpu_state.a == 0 { cpu_state.Z = true }
     			
     			
     		},
@@ -179,10 +172,6 @@ impl CpuExecutor {
 			_ => panic!("Unrecognised opcode class: {:?}", decode_register.info.opcode_class)
 
     	}
-    	
-    	// Expression returned is the updated cpu_state.
-    	new_cpu_state
     }
-    
 }
 
