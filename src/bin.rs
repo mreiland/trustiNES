@@ -12,7 +12,6 @@ fn main() {
     let rom = rom_loader::load_ines("roms/nestest.nes").unwrap();
     let mut cpu: CpuState = Default::default();
     let mut mem:Memory = Memory::new();
-    // TODO: implement loading the rom into the correct position in memory
 
     // TODO: handle this properly instead of just unwrapping
     let opcode_info = cpu::opcode::load_from_file("resources/opcodes.csv").unwrap();
