@@ -31,15 +31,14 @@ impl NesTest {
         let opcode = cpu_state.instruction_register;
         let info = &self.op_info[opcode as usize];
 
-        let mut s:String = format!("{:X}  ",pc).to_owned();
+        let mut s:String = format!("{:0>4X}  ",pc).to_owned();
 
         match len {
-            1 => { s.push_str(&format!("{:X}           ",cpu_state.instruction_register)) },
-            2 => { s.push_str(&format!("{:X} {:X}      ",cpu_state.instruction_register,mem.read8(pc+1).unwrap())) },
-            3 => { s.push_str(&format!("{:X} {:X} {:X} ",cpu_state.instruction_register,mem.read8(pc+1).unwrap(),mem.read8(pc+2).unwrap())) },
+            1 => { s.push_str(&format!("{:0>2X}            ",cpu_state.instruction_register)) },
+            2 => { s.push_str(&format!("{:0>2X} {:0>2X}    ",cpu_state.instruction_register,mem.read8(pc+1).unwrap())) },
+            3 => { s.push_str(&format!("{:0>2X} {:0>2X} {:0>2X} ",cpu_state.instruction_register,mem.read8(pc+1).unwrap(),mem.read8(pc+2).unwrap())) },
             _ => panic!("instructions should have a length of 1, 2, or 3.")
         }
-
 
         match dr.info.address_mode {
             // no explicit addresses for the following modes
@@ -48,16 +47,20 @@ impl NesTest {
 
             //explicit addresses from here on out
             AddressMode::Absolute =>        {
-                s.push_str(&format!("{} ${:X}",info.name,mem.read16(pc+1).unwrap()));
+                s.push_str(&format!(" {} ${:0>4X}",info.name,mem.read16(pc+1).unwrap()));
             },
             AddressMode::AbsoluteX       => { let _ = self.f.write(s.as_bytes()); panic!("AbsoluteX addressing mode is unimplemented"); },
             AddressMode::AbsoluteY       => { let _ = self.f.write(s.as_bytes()); panic!("AbsoluteY addressing mode is unimplemented"); },
-            AddressMode::Immediate       => { let _ = self.f.write(s.as_bytes()); panic!("Immediate addressing mode is unimplemented"); },
+            AddressMode::Immediate       => {
+                s.push_str(&format!(" {} #${:0>2X}",info.name,mem.read8(pc+1).unwrap()));
+            }
             AddressMode::Indirect        => { let _ = self.f.write(s.as_bytes()); panic!("Indirect addressing mode is unimplemented"); },
             AddressMode::IndexedIndirect => { let _ = self.f.write(s.as_bytes()); panic!("IndexedIndirect addressing mode is unimplemented"); },
             AddressMode::IndirectIndexed => { let _ = self.f.write(s.as_bytes()); panic!("IndirectIndexed addressing mode is unimplemented"); },
             AddressMode::Relative        => { let _ = self.f.write(s.as_bytes()); panic!("Relative addressing mode is unimplemented"); },
-            AddressMode::ZeroPage        => { let _ = self.f.write(s.as_bytes()); panic!("ZeroPage addressing mode is unimplemented"); },
+            AddressMode::ZeroPage        => {
+                s.push_str(&format!(" {} ${:0>2X} = {:0>2X}",info.name, cpu_state.decode_register.addr_final.unwrap(),cpu_state.decode_register.value_final.unwrap()));
+            },
             AddressMode::ZeroPageX       => { let _ = self.f.write(s.as_bytes()); panic!("ZeroPageX addressing mode is unimplemented"); },
             AddressMode::ZeroPageY       => { let _ = self.f.write(s.as_bytes()); panic!("ZeroPageY addressing mode is unimplemented"); },
             _ => { let _ = self.f.write(s.as_bytes()); panic!("unrecognized addressing mode") }
