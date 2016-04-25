@@ -30,6 +30,10 @@ impl CpuExecutor {
     }
 
 	/// Reset the given cpu_state.
+    pub fn power_on(self: &CpuExecutor, cpu_state: &mut CpuState, mem:&mut Memory) {
+        self.reset(cpu_state,mem);
+    }
+	/// Reset the given cpu_state.
     pub fn reset(self: &CpuExecutor, cpu_state: &mut CpuState, mem:&mut Memory) {
         cpu_state.pc = mem.read16(0xFFFC).unwrap();
         cpu_state.sp = 0xFD;
