@@ -4,8 +4,6 @@ use cpu::DecodeRegister;
 use cpu::common_defs::address_mode::AddressMode;
 use cpu::common_defs::opcode_class::OpcodeClass;
 use memory::Memory;
-use std::collections::HashMap;
-
 
 macro_rules! set_zs {
     ($cpu_state:expr,$val:expr) => ($cpu_state.Z = $val == 0;$cpu_state.S = $val >= 0x80 );
@@ -34,7 +32,6 @@ macro_rules! stack_pull16 {
     }
 }
 
-
 #[derive(Debug)]
 pub enum ExecutionError {
   MemoryError(::memory::MemoryError),
@@ -48,25 +45,14 @@ impl From<::memory::MemoryError> for ExecutionError {
 }
 
 pub struct CpuExecutor {
-    op_table: HashMap<u8,OpcodeExecInfo>,
+    op_table: Vec<OpcodeExecInfo>,
 }
 
 impl CpuExecutor {
-	
 	/// Construct a new CpuExecutor.
     pub fn new(opcodes: Vec<OpcodeExecInfo> ) -> CpuExecutor {
-        // Construct the HashMap and copy it over to CpuExecutor's constructor.
-        let mut op_table_temp: HashMap<u8, OpcodeExecInfo> = HashMap::new();
-        for oc in opcodes {
-            if op_table_temp.contains_key(&oc.opcode) {
-                println!("Encountered duplicate opcode: {:#x}", oc.opcode);
-                println!("Replacing previous opcode, which was {{ opcode: {:#x}, len: {}, cycles: {}, page_cycles: {} }}", oc.opcode, oc.len, oc.cycles, oc.page_cycles);
-            }
-            op_table_temp.insert(oc.opcode, oc);
-        }
-        
         CpuExecutor {
-            op_table: op_table_temp,
+            op_table:  opcodes,
         }
     }
 
@@ -99,7 +85,7 @@ impl CpuExecutor {
     /// Perform address resolution, returning the info in a DecodeRegister.
     fn decode(self: &CpuExecutor, cpu_state: &CpuState, mem: &Memory) -> Result<DecodeRegister,ExecutionError> {
         let mut dr = DecodeRegister {
-            info : self.op_table[&cpu_state.instruction_register].clone(),
+            info : self.op_table[cpu_state.instruction_register as usize].clone(),
             ..Default::default()
         };
         match dr.info.address_mode {
