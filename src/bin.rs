@@ -23,9 +23,9 @@ fn main() {
     mem.write(0,&rom);
 
     for i in 0..10 {
-        executor.fetch_and_decode(&mut cpu,&mut mem);
+        executor.fetch_and_decode(&mut cpu,&mut mem).unwrap();
         logger.log_after_fetch(&cpu,&mem);
-        executor.execute(&mut cpu,&mut mem);
+        executor.execute(&mut cpu,&mut mem).unwrap();
     }
 }
 
