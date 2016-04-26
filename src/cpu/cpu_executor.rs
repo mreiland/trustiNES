@@ -138,11 +138,6 @@ impl CpuExecutor {
     			cpu_state.a = cpu_state.decode_register.value_final.unwrap();
                 set_zs!(cpu_state,cpu_state.a);
 
-                //let tup = self.get_zs(cpu_state.a); cpu_state.Z = tup.0; cpu_state.S = tup.1;
-                 //match self.get_zs(cpu_state.a) {
-                     //(z,s) => { cpu_state.Z = z; cpu_state.S = s;}
-                 //}
-
                 cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
     		},
     		OpcodeClass::LDX => {
