@@ -34,7 +34,7 @@ impl NesTest {
         let mut s:String = format!("{:0>4X}  ",pc).to_owned();
 
         match len {
-            1 => { s.push_str(&format!("{:0>2X}            ",cpu_state.instruction_register)) },
+            1 => { s.push_str(&format!("{:0>2X}       ",cpu_state.instruction_register)) },
             2 => { s.push_str(&format!("{:0>2X} {:0>2X}    ",cpu_state.instruction_register,mem.read8(pc+1).unwrap())) },
             3 => { s.push_str(&format!("{:0>2X} {:0>2X} {:0>2X} ",cpu_state.instruction_register,mem.read8(pc+1).unwrap(),mem.read8(pc+2).unwrap())) },
             _ => panic!("instructions should have a length of 1, 2, or 3.")
@@ -43,7 +43,9 @@ impl NesTest {
         match dr.info.address_mode {
             // no explicit addresses for the following modes
             AddressMode::Accumulator  => { let _ = self.f.write(s.as_bytes()); panic!("Accumulator addressing mode is unimplemented"); },
-            AddressMode::Implied      => { let _ = self.f.write(s.as_bytes()); panic!("Implied addressing mode is unimplemented"); },
+            AddressMode::Implied      => {
+                s.push_str(&format!(" {}",info.name));
+            },
 
             //explicit addresses from here on out
             AddressMode::Absolute =>        {
