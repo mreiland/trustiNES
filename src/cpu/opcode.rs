@@ -10,13 +10,14 @@ use cpu::common_defs::address_mode;
 
 #[derive(Debug)]
 pub enum OpcodeLoadError {
-  Io(io::Error),
-  CSV(csv::Error),
-  ParseInt(num::ParseIntError),
-  ParseOpcodeClass(opcode_class::ParseError),
-  ParseAddressMode(address_mode::ParseError),
-  DuplicateOpcode(String),
-  IncorrectOpcodeCount(String)
+    Io(io::Error),
+    CSV(csv::Error),
+    ParseInt(num::ParseIntError),
+    ParseOpcodeClass(opcode_class::ParseError),
+    ParseAddressMode(address_mode::ParseError),
+    DuplicateOpcode(String),
+    IncorrectOpcodeCount(String),
+    NonContiguousOpcodes(String)
 }
 
 impl From<csv::Error> for OpcodeLoadError {
@@ -79,6 +80,12 @@ pub fn load_from_file<P:AsRef<Path>>(file_path: P) -> Result<(Vec<OpcodeExecInfo
 
     exec_info_vec.sort_by(|a,b| u8::cmp(&a.opcode,&b.opcode));
     debug_info_vec.sort_by(|a,b| u8::cmp(&a.opcode,&b.opcode));
+
+    for (i,op) in exec_info_vec.iter().enumerate() {
+        if i != op.opcode as usize {
+            return Err(OpcodeLoadError::NonContiguousOpcodes(format!("opcodes must be contiguous from 0 to 255, found gap at opcode {:X}",op.opcode)));
+        }
+    }
     Ok((exec_info_vec,debug_info_vec))
 }
 
