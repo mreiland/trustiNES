@@ -4,9 +4,7 @@ use std::path::Path;
 use cpu::CpuState;
 use memory::Memory;
 use cpu::AddressMode;
-use std::fmt::UpperHex;
 
-use std::vec;
 use cpu::OpcodeDebugInfo;
 
 //collections::vec::Vec<cpu::common_defs::OpcodeDebugInfo>
@@ -77,7 +75,7 @@ impl NesTest {
         s.push_str(&format!(" P:{:0>2X}",cpu_state.unpack_flags()));
         s.push_str(&format!(" SP:{:0>2X}\n",cpu_state.sp));
 
-        self.f.write(s.as_bytes());
+        let _ = self.f.write(s.as_bytes());
     }
 }
 

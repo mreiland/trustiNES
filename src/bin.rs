@@ -22,7 +22,7 @@ fn main() {
     cpu.pc = 0xC000;
     mem.write(0,&rom);
 
-    for i in 0..10 {
+    for _ in 0..10 {
         executor.fetch_and_decode(&mut cpu,&mut mem).is_ok();
         logger.log_after_fetch(&cpu,&mem);
         executor.execute(&mut cpu,&mut mem).is_ok();
