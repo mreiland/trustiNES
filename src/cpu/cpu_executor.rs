@@ -6,6 +6,11 @@ use cpu::common_defs::opcode_class::OpcodeClass;
 use memory::Memory;
 use std::collections::HashMap;
 
+
+macro_rules! set_zs {
+    ($cpu_state:expr,$val:expr) => ($cpu_state.Z = $val == 0;$cpu_state.S = $val >= 0x80 );
+}
+
 pub struct CpuExecutor {
     op_table: HashMap<u8,OpcodeExecInfo>,
 }
@@ -121,54 +126,55 @@ impl CpuExecutor {
     /// Perform the current instruction, returning the CpuState after execution.
     pub fn execute(self: &CpuExecutor, cpu_state: &mut CpuState, mem:&mut Memory) {
     	// Figure out which opcode is being executed.
-    	let ref decode_register = cpu_state.decode_register;
-    	
-    	match decode_register.info.opcode_class {
-    		// Arithmetic Shift Left
+    	match cpu_state.decode_register.info.opcode_class {
     		OpcodeClass::ASL => {
 				cpu_state.a = cpu_state.a << 1;
 				cpu_state.C = (128 & cpu_state.a) > 0;
     			if cpu_state.a == 0 { cpu_state.Z = true; }
 				
-                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
+                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
     		},
-    		// Load Accumulator
     		OpcodeClass::LDA => {
-    			cpu_state.a = decode_register.value_final.unwrap();
-                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
+    			cpu_state.a = cpu_state.decode_register.value_final.unwrap();
+                set_zs!(cpu_state,cpu_state.a);
+
+                //let tup = self.get_zs(cpu_state.a); cpu_state.Z = tup.0; cpu_state.S = tup.1;
+                 //match self.get_zs(cpu_state.a) {
+                     //(z,s) => { cpu_state.Z = z; cpu_state.S = s;}
+                 //}
+
+                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
     		},
-    		// Load X
     		OpcodeClass::LDX => {
-    			cpu_state.x = decode_register.value_final.unwrap();
-                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
+    			cpu_state.x = cpu_state.decode_register.value_final.unwrap();
+                set_zs!(cpu_state,cpu_state.x);
+
+                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
     		},
-    		// Load Y
     		OpcodeClass::LDY => {
-    			cpu_state.y = decode_register.value_final.unwrap();
-                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
+    			cpu_state.y = cpu_state.decode_register.value_final.unwrap();
+                set_zs!(cpu_state,cpu_state.y);
+
+                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
     		},
-    		// Logical Shift Right
     		OpcodeClass::LSR => {
     			cpu_state.a = cpu_state.a >> 1;
     			cpu_state.C = 1 & cpu_state.a > 0;
     			if cpu_state.a == 0 { cpu_state.Z = true; }
     			
-                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
+                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
     		},
-    		// Jump
     		OpcodeClass::JMP => {
-    			cpu_state.pc = decode_register.addr_final.unwrap();
+    			cpu_state.pc = cpu_state.decode_register.addr_final.unwrap();
     		},
-    		// NOP (No Operation)
     		OpcodeClass::NOP => {},
-    		// Store X
     		OpcodeClass::STX => {
-                mem.write8(decode_register.addr_final.unwrap(),decode_register.value_final.unwrap());
-                cpu_state.pc = cpu_state.pc + (decode_register.info.len as u16 -1);
+                mem.write8(cpu_state.decode_register.addr_final.unwrap(),cpu_state.decode_register.value_final.unwrap());
+                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
     		},
     		
     		// Default: not sure what this opcode is.
-			_ => panic!("Unrecognised opcode class: {:?}", decode_register.info.opcode_class)
+			_ => panic!("Unrecognised opcode class: {:?}", cpu_state.decode_register.info.opcode_class)
 
     	}
     }
