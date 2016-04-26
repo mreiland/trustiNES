@@ -11,6 +11,18 @@ macro_rules! set_zs {
     ($cpu_state:expr,$val:expr) => ($cpu_state.Z = $val == 0;$cpu_state.S = $val >= 0x80 );
 }
 
+#[derive(Debug)]
+pub enum ExecutionError {
+  MemoryError(::memory::MemoryError),
+  UnexpectedOpcode(String),
+  UnexpectedAddressMode(String)
+}
+impl From<::memory::MemoryError> for ExecutionError {
+    fn from(err: ::memory::MemoryError) -> ExecutionError {
+        ExecutionError::MemoryError(err)
+    }
+}
+
 pub struct CpuExecutor {
     op_table: HashMap<u8,OpcodeExecInfo>,
 }
@@ -52,14 +64,15 @@ impl CpuExecutor {
     }
 
 	/// Fetch the next instruction and perform address resolution.
-    pub fn fetch_and_decode(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
+    pub fn fetch_and_decode(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) -> Result<(),ExecutionError> {
         cpu_state.instruction_register = mem.read8(cpu_state.pc).unwrap();
-        cpu_state.decode_register = self.decode(cpu_state,mem);
+        cpu_state.decode_register = try!(self.decode(cpu_state,mem));
         cpu_state.pc = cpu_state.pc+1;
+        Ok(())
     }
     
     /// Perform address resolution, returning the info in a DecodeRegister.
-    fn decode(self: &CpuExecutor, cpu_state: &CpuState, mem: &Memory) -> DecodeRegister {
+    fn decode(self: &CpuExecutor, cpu_state: &CpuState, mem: &Memory) -> Result<DecodeRegister,ExecutionError> {
         let mut dr = DecodeRegister {
             info : self.op_table[&cpu_state.instruction_register].clone(),
             ..Default::default()
@@ -117,14 +130,14 @@ impl CpuExecutor {
                 dr.addr_final  = Some( (mem.read8(cpu_state.pc+1).unwrap() as u16 + cpu_state.y as u16) % 256);
                 dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
-            _ => panic!("unrecognized addressing mode while decoding instruction_register!")
+            _ => { return Err(ExecutionError::UnexpectedAddressMode(format!("unrecognized addressing mode '{:?}' while decoding instruction_register!",dr.info.address_mode))); }
         }
 
-        return dr;
+        return Ok(dr);
     }
     
     /// Perform the current instruction, returning the CpuState after execution.
-    pub fn execute(self: &CpuExecutor, cpu_state: &mut CpuState, mem:&mut Memory) {
+    pub fn execute(self: &CpuExecutor, cpu_state: &mut CpuState, mem:&mut Memory) -> Result<(),ExecutionError> {
     	// Figure out which opcode is being executed.
     	match cpu_state.decode_register.info.opcode_class {
     		OpcodeClass::ASL => {
@@ -164,14 +177,14 @@ impl CpuExecutor {
     		},
     		OpcodeClass::NOP => {},
     		OpcodeClass::STX => {
-                mem.write8(cpu_state.decode_register.addr_final.unwrap(),cpu_state.decode_register.value_final.unwrap());
+                try!(mem.write8(cpu_state.decode_register.addr_final.unwrap(),cpu_state.decode_register.value_final.unwrap()));
                 cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
     		},
     		
-    		// Default: not sure what this opcode is.
-			_ => panic!("Unrecognised opcode class: {:?}", cpu_state.decode_register.info.opcode_class)
+			_ => { return Err(ExecutionError::UnexpectedOpcode(format!("Unrecognised opcode class: {:?}", cpu_state.decode_register.info.opcode_class)));}
 
     	}
+        Ok(())
     }
 }
 
