@@ -82,9 +82,10 @@ impl CpuExecutor {
     }
     
     /// Execute a single instruction in the given memory and cpu_state context.
-    pub fn step(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) {
-        self.fetch_and_decode(cpu_state,mem);
-        self.execute(cpu_state,mem);
+    pub fn step(self: &CpuExecutor, cpu_state: &mut CpuState,mem:&mut Memory) -> Result<(),ExecutionError> {
+        try!(self.fetch_and_decode(cpu_state,mem));
+        try!(self.execute(cpu_state,mem));
+        Ok(())
     }
 
 	/// Fetch the next instruction and perform address resolution.
