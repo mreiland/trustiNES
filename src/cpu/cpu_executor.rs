@@ -11,6 +11,30 @@ macro_rules! set_zs {
     ($cpu_state:expr,$val:expr) => ($cpu_state.Z = $val == 0;$cpu_state.S = $val >= 0x80 );
 }
 
+macro_rules! stack_push8 {
+    ($cpu_state:expr,$mem:expr,$val:expr) => (try!($mem.write8(0x0100 | $cpu_state.sp,$val)); $cpu_state.sp-=1;);
+}
+macro_rules! stack_push16 {
+    ($cpu_state:expr,$mem:expr,$val:expr) => (try!($mem.write16(0x0100 as u16 | $cpu_state.sp as u16 -1,$val)); $cpu_state.sp-=2;);
+}
+macro_rules! stack_pull8 {
+    ($cpu_state:expr,$mem:expr) => {
+        {
+            $cpu_state.pc+=1;
+            $mem.read8(0x0100 | $cpu_state.sp;)
+        }
+    }
+}
+macro_rules! stack_pull16 {
+    ($cpu_state:expr,$mem:expr) => {
+        {
+            $cpu_state.pc+=2;
+            $mem.read16(0x0100 as u16 | $cpu_state.sp as u16 -1)
+        }
+    }
+}
+
+
 #[derive(Debug)]
 pub enum ExecutionError {
   MemoryError(::memory::MemoryError),
