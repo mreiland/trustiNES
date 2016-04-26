@@ -91,7 +91,7 @@ mod address_mode {
         let _ = mem.write8(0,0x0A); // 0x0A = ASL Accumulator
 
         cpu.pc = 0;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x0A);
         assert_eq!(OpcodeClass::ASL,cpu.decode_register.info.opcode_class);
@@ -106,7 +106,7 @@ mod address_mode {
         let _ = mem.write8(0,0x69); // 0x69 = ADC Immediate
 
         cpu.pc = 0;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x69);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -121,7 +121,7 @@ mod address_mode {
         let _ = mem.write8(0,0x00); // 0x00 = BRK Implied
 
         cpu.pc = 0;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x00);
         assert_eq!(OpcodeClass::BRK,cpu.decode_register.info.opcode_class);
@@ -141,7 +141,7 @@ mod address_mode {
         let _ = mem.write8(300,5);
 
         cpu.pc = 0;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(0x6D,cpu.instruction_register);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -161,7 +161,7 @@ mod address_mode {
         let _ = mem.write16(300,500);
 
         cpu.pc = 0;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x6C);
         assert_eq!(OpcodeClass::JMP,cpu.decode_register.info.opcode_class);
@@ -180,7 +180,7 @@ mod address_mode {
         let _ = mem.write8(1,100);
 
         cpu.pc = 0;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x90);
         assert_eq!(OpcodeClass::BCC,cpu.decode_register.info.opcode_class);
@@ -200,7 +200,7 @@ mod address_mode {
         let _ = mem.write8(100,5);
 
         cpu.pc = 0;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x65);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -224,7 +224,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.x = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x7D);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -247,7 +247,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.x = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x7D);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -268,7 +268,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.x = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x7D);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -289,7 +289,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.x = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x7D);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -310,7 +310,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x79);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -332,7 +332,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x79);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -352,7 +352,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x79);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -373,7 +373,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x79);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -394,7 +394,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.x = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x75);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -416,7 +416,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.x = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x75);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -436,7 +436,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.x = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x75);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -456,7 +456,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.x = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x75);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -477,7 +477,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0xB6);
         assert_eq!(OpcodeClass::LDX,cpu.decode_register.info.opcode_class);
@@ -498,7 +498,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0xB6);
         assert_eq!(OpcodeClass::LDX,cpu.decode_register.info.opcode_class);
@@ -518,7 +518,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0xB6);
         assert_eq!(OpcodeClass::LDX,cpu.decode_register.info.opcode_class);
@@ -538,7 +538,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0xB6);
         assert_eq!(OpcodeClass::LDX,cpu.decode_register.info.opcode_class);
@@ -561,7 +561,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.x = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x61);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -585,7 +585,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x71);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -611,7 +611,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x71);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -635,7 +635,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x71);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
@@ -659,7 +659,7 @@ mod address_mode {
 
         cpu.pc = 0;
         cpu.y = 5;
-        exec.fetch_and_decode(&mut cpu,&mut mem);
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
 
         assert_eq!(cpu.instruction_register,0x71);
         assert_eq!(OpcodeClass::ADC,cpu.decode_register.info.opcode_class);
