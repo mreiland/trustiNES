@@ -59,7 +59,9 @@ impl NesTest {
             AddressMode::Indirect        => { let _ = self.f.write(s.as_bytes()); panic!("Indirect addressing mode is unimplemented"); },
             AddressMode::IndexedIndirect => { let _ = self.f.write(s.as_bytes()); panic!("IndexedIndirect addressing mode is unimplemented"); },
             AddressMode::IndirectIndexed => { let _ = self.f.write(s.as_bytes()); panic!("IndirectIndexed addressing mode is unimplemented"); },
-            AddressMode::Relative        => { let _ = self.f.write(s.as_bytes()); panic!("Relative addressing mode is unimplemented"); },
+            AddressMode::Relative        => {
+                s.push_str(&format!(" {} ${:0>2X}",info.name,cpu_state.decode_register.addr_final.unwrap()));
+            },
             AddressMode::ZeroPage        => {
                 s.push_str(&format!(" {} ${:0>2X} = {:0>2X}",info.name, cpu_state.decode_register.addr_final.unwrap(),cpu_state.decode_register.value_final.unwrap()));
             },
