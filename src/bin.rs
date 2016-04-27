@@ -7,7 +7,6 @@ pub mod logger;
 use cpu::CpuState;
 use memory::Memory;
 
-
 fn main() {
     let rom = rom_loader::load_ines("roms/nestest.nes").unwrap();
     let mut cpu: CpuState = Default::default();
@@ -22,10 +21,10 @@ fn main() {
     cpu.pc = 0xC000;
     mem.write(0,&rom);
 
-    for _ in 0..10 {
-        executor.fetch_and_decode(&mut cpu,&mut mem).is_ok();
+    for _ in 0..8991 {
+        executor.fetch_and_decode(&mut cpu,&mut mem).unwrap();
         logger.log_after_fetch(&cpu,&mem);
-        executor.execute(&mut cpu,&mut mem).is_ok();
+        executor.execute(&mut cpu,&mut mem).unwrap();
     }
 }
 
