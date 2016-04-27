@@ -6,9 +6,14 @@ use cpu::common_defs::opcode_class::OpcodeClass;
 use memory::Memory;
 
 macro_rules! set_zs {
-    ($cpu_state:expr,$val:expr) => ($cpu_state.Z = $val == 0;$cpu_state.S = $val >= 0x80 );
+    ($cpu_state:expr,$val:expr) => (set_z!($cpu_state,$val);set_s!($cpu_state,$val););
 }
-
+macro_rules! set_z {
+    ($cpu_state:expr,$val:expr) => ($cpu_state.Z = $val == 0;);
+}
+macro_rules! set_s {
+    ($cpu_state:expr,$val:expr) => ($cpu_state.S = $val >= 0x80;);
+}
 macro_rules! stack_push8 {
     ($cpu_state:expr,$mem:expr,$val:expr) => (try!($mem.write8(0x0100 | $cpu_state.sp,$val)); $cpu_state.sp-=1;);
 }
