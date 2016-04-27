@@ -191,6 +191,10 @@ impl CpuExecutor {
                 if !cpu_state.Z { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
                 else            { cpu_state.pc += cpu_state.decode_register.info.len as u16-1;  }
     		},
+    		OpcodeClass::BVC => {
+                if !cpu_state.V { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
+                else            { cpu_state.pc += cpu_state.decode_register.info.len as u16-1;  }
+    		},
     		OpcodeClass::BVS => {
                 if cpu_state.V { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
                 else           { cpu_state.pc += cpu_state.decode_register.info.len as u16-1;  }
