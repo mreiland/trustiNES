@@ -240,6 +240,9 @@ impl CpuExecutor {
     		},
     		OpcodeClass::NOP => {
             },
+    		OpcodeClass::RTS => {
+                cpu_state.pc = stack_pull16!(cpu_state,mem).unwrap() + 1;
+            },
     		OpcodeClass::SEC => {
                 cpu_state.C = true;
     		},
