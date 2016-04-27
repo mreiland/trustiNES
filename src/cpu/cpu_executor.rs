@@ -15,7 +15,7 @@ macro_rules! set_s {
     ($cpu_state:expr,$val:expr) => ($cpu_state.S = $val >= 0x80;);
 }
 macro_rules! stack_push8 {
-    ($cpu_state:expr,$mem:expr,$val:expr) => (try!($mem.write8(0x0100 | $cpu_state.sp,$val)); $cpu_state.sp-=1;);
+    ($cpu_state:expr,$mem:expr,$val:expr) => (try!($mem.write8(0x0100 as u16 | $cpu_state.sp as u16,$val)); $cpu_state.sp-=1;);
 }
 macro_rules! stack_push16 {
     ($cpu_state:expr,$mem:expr,$val:expr) => (try!($mem.write16(0x0100 as u16 | $cpu_state.sp as u16 -1,$val)); $cpu_state.sp-=2;);
