@@ -246,6 +246,9 @@ impl CpuExecutor {
     		OpcodeClass::SEC => {
                 cpu_state.C = true;
     		},
+    		OpcodeClass::SED => {
+                cpu_state.D = true;
+    		},
     		OpcodeClass::SEI => {
                 cpu_state.I = true;
     		},
