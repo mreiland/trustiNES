@@ -126,8 +126,13 @@ impl CpuExecutor {
                 dr.value_final       = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
             },
             AddressMode::Relative        => {
-                dr.addr_final  = Some(cpu_state.pc+1);
-                dr.value_final = Some(mem.read8(dr.addr_final.unwrap()).unwrap());
+                dr.value_final = Some(mem.read8(cpu_state.pc+1).unwrap());
+
+                // NOTE: relative is from the end of the current instruction and relative
+                // instructions are 2 bytes long, so we add 2 before adding in the specified offset
+                //
+                if dr.value_final.unwrap() < 0x80 { dr.addr_final  = Some(cpu_state.pc + 2 + dr.value_final.unwrap() as u16); }
+                else                              { dr.addr_final  = Some(cpu_state.pc + 2 + dr.value_final.unwrap() as u16 - 0x100);}
             },
             AddressMode::ZeroPage        => {
                 dr.addr_final  = Some(mem.read8(cpu_state.pc+1).unwrap() as u16);

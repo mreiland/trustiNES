@@ -171,13 +171,31 @@ mod address_mode {
         assert_eq!(500,cpu.decode_register.addr_final.unwrap());
     }
     #[test]
-    fn relative() {
+    fn relative_forward() {
         let mut cpu: cpu::CpuState = Default::default();
         let mut mem = Memory::new();
         let exec = build_executor();
 
         let _ = mem.write8(0,0x90); // 0x90 = BCC IndirectIndexed
-        let _ = mem.write8(1,100);
+        let _ = mem.write8(1,2);
+
+        cpu.pc = 0;
+        exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
+
+        assert_eq!(cpu.instruction_register,0x90);
+        assert_eq!(OpcodeClass::BCC,cpu.decode_register.info.opcode_class);
+        assert_eq!(AddressMode::Relative,cpu.decode_register.info.address_mode);
+
+        assert_eq!(4,cpu.decode_register.addr_final.unwrap());
+    }
+    #[test]
+    fn relative_backward() {
+        let mut cpu: cpu::CpuState = Default::default();
+        let mut mem = Memory::new();
+        let exec = build_executor();
+
+        let _ = mem.write8(0,0x90); // 0x90 = BCC IndirectIndexed
+        let _ = mem.write8(1,0xFF);
 
         cpu.pc = 0;
         exec.fetch_and_decode(&mut cpu,&mut mem).is_ok();
@@ -187,7 +205,6 @@ mod address_mode {
         assert_eq!(AddressMode::Relative,cpu.decode_register.info.address_mode);
 
         assert_eq!(1,cpu.decode_register.addr_final.unwrap());
-        assert_eq!(100,cpu.decode_register.value_final.unwrap());
     }
     #[test]
     fn zeropage() {
