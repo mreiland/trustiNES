@@ -246,6 +246,9 @@ impl CpuExecutor {
     		OpcodeClass::SEC => {
                 cpu_state.C = true;
     		},
+    		OpcodeClass::SEI => {
+                cpu_state.I = true;
+    		},
     		OpcodeClass::STA => {
                 try!(mem.write8(cpu_state.decode_register.addr_final.unwrap(),cpu_state.a));
                 cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
