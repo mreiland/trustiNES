@@ -235,7 +235,7 @@ impl CpuExecutor {
     			cpu_state.pc = cpu_state.decode_register.addr_final.unwrap();
     		},
     		OpcodeClass::JSR => {
-                stack_push16!(cpu_state,mem,cpu_state.pc-1);
+                stack_push16!(cpu_state,mem,cpu_state.pc+1);
     			cpu_state.pc = cpu_state.decode_register.addr_final.unwrap();
     		},
     		OpcodeClass::NOP => {
