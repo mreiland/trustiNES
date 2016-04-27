@@ -180,6 +180,13 @@ impl CpuExecutor {
                 if cpu_state.Z { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
                 else           { cpu_state.pc += cpu_state.decode_register.info.len as u16-1;  }
     		},
+    		OpcodeClass::BIT => {
+                cpu_state.V = (cpu_state.decode_register.value_final.unwrap() >> 6) & 1 > 0;
+                set_z!(cpu_state,cpu_state.decode_register.value_final.unwrap() & cpu_state.a);
+                set_s!(cpu_state,cpu_state.decode_register.value_final.unwrap());
+
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
+    		},
     		OpcodeClass::BNE => {
                 if !cpu_state.Z { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
                 else            { cpu_state.pc += cpu_state.decode_register.info.len as u16-1;  }
