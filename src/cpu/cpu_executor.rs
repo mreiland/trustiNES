@@ -23,7 +23,7 @@ macro_rules! stack_push16 {
 macro_rules! stack_pull8 {
     ($cpu_state:expr,$mem:expr) => {
         {
-            $cpu_state.pc+=1;
+            $cpu_state.sp+=1;
             $mem.read8(0x0100 | $cpu_state.sp;)
         }
     }
@@ -31,7 +31,7 @@ macro_rules! stack_pull8 {
 macro_rules! stack_pull16 {
     ($cpu_state:expr,$mem:expr) => {
         {
-            $cpu_state.pc+=2;
+            $cpu_state.sp+=2;
             $mem.read16(0x0100 as u16 | $cpu_state.sp as u16 -1)
         }
     }
