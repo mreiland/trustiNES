@@ -163,6 +163,10 @@ impl CpuExecutor {
 				
                 cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
+    		OpcodeClass::BCC => {
+                if !cpu_state.C { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
+                else            { cpu_state.pc += cpu_state.decode_register.info.len as u16-1; }
+    		},
     		OpcodeClass::BCS => {
                 if cpu_state.C { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
                 else           { cpu_state.pc += cpu_state.decode_register.info.len as u16-1; }
