@@ -161,11 +161,11 @@ impl CpuExecutor {
 				cpu_state.C = (128 & cpu_state.a) > 0;
     			if cpu_state.a == 0 { cpu_state.Z = true; }
 				
-                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		OpcodeClass::BCS => {
                 if cpu_state.C { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
-                else { cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1); }
+                else           { cpu_state.pc += cpu_state.decode_register.info.len as u16-1; }
     		},
     		OpcodeClass::CLC => {
                 cpu_state.C = false;
@@ -174,26 +174,26 @@ impl CpuExecutor {
     			cpu_state.a = cpu_state.decode_register.value_final.unwrap();
                 set_zs!(cpu_state,cpu_state.a);
 
-                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		OpcodeClass::LDX => {
     			cpu_state.x = cpu_state.decode_register.value_final.unwrap();
                 set_zs!(cpu_state,cpu_state.x);
 
-                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		OpcodeClass::LDY => {
     			cpu_state.y = cpu_state.decode_register.value_final.unwrap();
                 set_zs!(cpu_state,cpu_state.y);
 
-                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		OpcodeClass::LSR => {
     			cpu_state.a = cpu_state.a >> 1;
     			cpu_state.C = 1 & cpu_state.a > 0;
     			if cpu_state.a == 0 { cpu_state.Z = true; }
     			
-                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		OpcodeClass::JMP => {
     			cpu_state.pc = cpu_state.decode_register.addr_final.unwrap();
@@ -209,7 +209,7 @@ impl CpuExecutor {
     		},
     		OpcodeClass::STX => {
                 try!(mem.write8(cpu_state.decode_register.addr_final.unwrap(),cpu_state.decode_register.value_final.unwrap()));
-                cpu_state.pc = cpu_state.pc + (cpu_state.decode_register.info.len as u16 -1);
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		
 			_ => { return Err(ExecutionError::UnexpectedOpcode(format!("Unrecognised opcode class: {:?}", cpu_state.decode_register.info.opcode_class)));}
