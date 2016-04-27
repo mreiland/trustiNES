@@ -224,7 +224,7 @@ impl CpuExecutor {
                 cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		OpcodeClass::STX => {
-                try!(mem.write8(cpu_state.decode_register.addr_final.unwrap(),cpu_state.decode_register.value_final.unwrap()));
+                try!(mem.write8(cpu_state.decode_register.addr_final.unwrap(),cpu_state.x));
                 cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		
