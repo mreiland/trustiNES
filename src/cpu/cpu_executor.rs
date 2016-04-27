@@ -166,6 +166,9 @@ impl CpuExecutor {
     		OpcodeClass::BCS => {
                 if cpu_state.C { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
     		},
+    		OpcodeClass::CLC => {
+                cpu_state.C = false;
+    		},
     		OpcodeClass::LDA => {
     			cpu_state.a = cpu_state.decode_register.value_final.unwrap();
                 set_zs!(cpu_state,cpu_state.a);
@@ -198,7 +201,8 @@ impl CpuExecutor {
                 stack_push16!(cpu_state,mem,cpu_state.pc-1);
     			cpu_state.pc = cpu_state.decode_register.addr_final.unwrap();
     		},
-    		OpcodeClass::NOP => {},
+    		OpcodeClass::NOP => {
+            },
     		OpcodeClass::SEC => {
                 cpu_state.C = true;
     		},
