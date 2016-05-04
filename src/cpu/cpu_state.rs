@@ -39,8 +39,6 @@ pub struct CpuState {
 }
 
 // svubdizc
-// 00100110 26
-// 00100100 24
 impl CpuState {
     pub fn unpack_flags(self: &CpuState) -> u8 {
         ( (self.C as u8) << 0)
