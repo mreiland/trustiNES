@@ -244,6 +244,9 @@ impl CpuExecutor {
     		OpcodeClass::PHP => {
                 stack_push8!(cpu_state,mem,cpu_state.unpack_flags() | 0x30);
             },
+    		OpcodeClass::PLA => {
+                cpu_state.a = stack_pull8!(cpu_state,mem).unwrap();
+            },
     		OpcodeClass::RTS => {
                 cpu_state.pc = stack_pull16!(cpu_state,mem).unwrap() + 1;
             },
