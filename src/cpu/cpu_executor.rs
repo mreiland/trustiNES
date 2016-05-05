@@ -36,6 +36,16 @@ macro_rules! stack_pull16 {
         }
     }
 }
+macro_rules! compare {
+    ($cpu_state:expr,$a:expr,$b:expr) => {
+        {
+            set_zs!($cpu_state,$a - $b);
+            $cpu_state.C = $a >= $b;
+        }
+    }
+}
+
+
 
 #[derive(Debug)]
 pub enum ExecutionError {
@@ -210,8 +220,7 @@ impl CpuExecutor {
                 else           { cpu_state.pc += cpu_state.decode_register.info.len as u16-1;  }
     		},
     		OpcodeClass::CMP => {
-                set_zs!(cpu_state,cpu_state.a - cpu_state.decode_register.value_final.unwrap());
-                cpu_state.C = cpu_state.a >= cpu_state.decode_register.value_final.unwrap();
+                compare!(cpu_state,cpu_state.a,cpu_state.decode_register.value_final.unwrap());
 
                 cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
