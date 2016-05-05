@@ -204,7 +204,7 @@ impl CpuExecutor {
                 cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		OpcodeClass::BMI => {
-                if cpu_state.C { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
+                if cpu_state.S { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
                 else           { cpu_state.pc += cpu_state.decode_register.info.len as u16-1;  }
     		},
     		OpcodeClass::BNE => {
