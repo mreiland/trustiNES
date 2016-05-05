@@ -275,6 +275,11 @@ impl CpuExecutor {
                 cpu_state.a = stack_pull8!(cpu_state,mem).unwrap();
                 set_zs!(cpu_state,cpu_state.a);
             },
+            //http://wiki.nesdev.com/w/index.php/Status_flags
+    		OpcodeClass::PLP => {
+                let val = (stack_pull8!(cpu_state,mem).unwrap()&0xEF) | 0x20;
+                cpu_state.pack_flags(val);
+            },
     		OpcodeClass::RTS => {
                 cpu_state.pc = stack_pull16!(cpu_state,mem).unwrap() + 1;
             },
