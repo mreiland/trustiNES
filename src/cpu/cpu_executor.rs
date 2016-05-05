@@ -234,6 +234,9 @@ impl CpuExecutor {
     		OpcodeClass::CLD => {
                 cpu_state.D = false;
     		},
+    		OpcodeClass::CLV => {
+                cpu_state.V = false;
+    		},
     		OpcodeClass::LDA => {
     			cpu_state.a = cpu_state.decode_register.value_final.unwrap();
                 set_zs!(cpu_state,cpu_state.a);
