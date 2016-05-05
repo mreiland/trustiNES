@@ -246,6 +246,7 @@ impl CpuExecutor {
             },
     		OpcodeClass::PLA => {
                 cpu_state.a = stack_pull8!(cpu_state,mem).unwrap();
+                set_zs!(cpu_state,cpu_state.a);
             },
     		OpcodeClass::RTS => {
                 cpu_state.pc = stack_pull16!(cpu_state,mem).unwrap() + 1;
