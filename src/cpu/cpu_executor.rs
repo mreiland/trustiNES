@@ -268,6 +268,12 @@ impl CpuExecutor {
     		},
     		OpcodeClass::NOP => {
             },
+    		OpcodeClass::ORA => {
+                cpu_state.a = cpu_state.a | cpu_state.decode_register.value_final.unwrap();
+                set_zs!(cpu_state,cpu_state.a);
+
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
+            },
     		OpcodeClass::PHA => {
                 stack_push8!(cpu_state,mem,cpu_state.a);
             },
