@@ -209,6 +209,12 @@ impl CpuExecutor {
                 if cpu_state.V { cpu_state.pc = cpu_state.decode_register.addr_final.unwrap(); }
                 else           { cpu_state.pc += cpu_state.decode_register.info.len as u16-1;  }
     		},
+    		OpcodeClass::CMP => {
+                set_zs!(cpu_state,cpu_state.a - cpu_state.decode_register.value_final.unwrap());
+                cpu_state.C = cpu_state.a >= cpu_state.decode_register.value_final.unwrap();
+
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
+    		},
     		OpcodeClass::CLC => {
                 cpu_state.C = false;
     		},
