@@ -264,6 +264,9 @@ impl CpuExecutor {
     		},
     		OpcodeClass::NOP => {
             },
+    		OpcodeClass::PHA => {
+                stack_push8!(cpu_state,mem,cpu_state.a);
+            },
             // http://wiki.nesdev.com/w/index.php/Status_flags
     		OpcodeClass::PHP => {
                 stack_push8!(cpu_state,mem,cpu_state.unpack_flags() | 0x30);
