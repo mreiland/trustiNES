@@ -324,6 +324,18 @@ impl CpuExecutor {
     		OpcodeClass::RTS => {
                 cpu_state.pc = stack_pull16!(cpu_state,mem).unwrap() + 1;
             },
+    		OpcodeClass::SBC => {
+                let a = cpu_state.a;
+                let b = cpu_state.decode_register.value_final.unwrap();
+                let diff:i16 = a as i16 - b as i16 - !cpu_state.C as i16;
+                cpu_state.a = diff as u8;
+                set_zs!(cpu_state,cpu_state.a);
+
+                cpu_state.C = diff >= 0x00;
+                cpu_state.V = ((a^b)&0x80) != 0 && ((a^cpu_state.a)&0x80) != 0;
+
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
+    		},
     		OpcodeClass::SEC => {
                 cpu_state.C = true;
     		},
