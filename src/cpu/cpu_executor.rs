@@ -259,6 +259,10 @@ impl CpuExecutor {
 
                 cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
+    		OpcodeClass::DEX => {
+                cpu_state.x -= 1;
+                set_zs!(cpu_state,cpu_state.x);
+    		},
     		OpcodeClass::DEY => {
                 cpu_state.y -= 1;
                 set_zs!(cpu_state,cpu_state.y);
