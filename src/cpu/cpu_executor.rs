@@ -369,6 +369,10 @@ impl CpuExecutor {
                 try!(mem.write8(cpu_state.decode_register.addr_final.unwrap(),cpu_state.x));
                 cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
+    		OpcodeClass::TAY => {
+                cpu_state.y = cpu_state.a;
+                set_zs!(cpu_state,cpu_state.y);
+    		},
     		
 			_ => { return Err(ExecutionError::UnexpectedOpcode(format!("Unrecognised opcode class: {:?}", cpu_state.decode_register.info.opcode_class)));}
 
