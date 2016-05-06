@@ -377,6 +377,10 @@ impl CpuExecutor {
                 cpu_state.y = cpu_state.a;
                 set_zs!(cpu_state,cpu_state.y);
     		},
+    		OpcodeClass::TYA => {
+                cpu_state.a = cpu_state.y;
+                set_zs!(cpu_state,cpu_state.a);
+    		},
     		
 			_ => { return Err(ExecutionError::UnexpectedOpcode(format!("Unrecognised opcode class: {:?}", cpu_state.decode_register.info.opcode_class)));}
 
