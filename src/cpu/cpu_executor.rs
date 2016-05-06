@@ -249,6 +249,11 @@ impl CpuExecutor {
     		OpcodeClass::CLV => {
                 cpu_state.V = false;
     		},
+    		OpcodeClass::CPX => {
+                compare!(cpu_state,cpu_state.x,cpu_state.decode_register.value_final.unwrap());
+
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
+    		},
     		OpcodeClass::CPY => {
                 compare!(cpu_state,cpu_state.y,cpu_state.decode_register.value_final.unwrap());
 
