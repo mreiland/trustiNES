@@ -47,7 +47,12 @@ impl NesTest {
 
             //explicit addresses from here on out
             AddressMode::Absolute =>        {
-                s.push_str(&format!(" {} ${:0>4X}",info.name, cpu_state.decode_register.addr_final.unwrap()));
+                if info.opcode == 0x8E || info.opcode == 0xAE || info.opcode == 0xAD {
+                    s.push_str(&format!(" {} ${:0>4X} = {:0>2X}",info.name, cpu_state.decode_register.addr_final.unwrap(),cpu_state.decode_register.value_final.unwrap()));
+                }
+                else {
+                    s.push_str(&format!(" {} ${:0>4X}",info.name, cpu_state.decode_register.addr_final.unwrap()));
+                }
             },
             AddressMode::AbsoluteX       => { let _ = self.f.write(s.as_bytes()); panic!("AbsoluteX addressing mode is unimplemented"); },
             AddressMode::AbsoluteY       => { let _ = self.f.write(s.as_bytes()); panic!("AbsoluteY addressing mode is unimplemented"); },
