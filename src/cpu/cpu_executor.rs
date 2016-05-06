@@ -171,6 +171,18 @@ impl CpuExecutor {
     pub fn execute(self: &CpuExecutor, cpu_state: &mut CpuState, mem:&mut Memory) -> Result<(),ExecutionError> {
     	// Figure out which opcode is being executed.
     	match cpu_state.decode_register.info.opcode_class {
+    		OpcodeClass::ADC => {
+                let a = cpu_state.a;
+                let b = cpu_state.decode_register.value_final.unwrap();
+                let sum:u16 = a as u16 + b as u16 + cpu_state.C as u16;
+                cpu_state.a = sum as u8;
+                set_zs!(cpu_state,cpu_state.a);
+
+                cpu_state.C = sum > 0xFF;
+                cpu_state.V = ((a^b)&0x80) == 0 && ((a^cpu_state.a)&0x80) != 0;
+
+                cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
+    		},
     		OpcodeClass::AND => {
 				cpu_state.a = cpu_state.a & cpu_state.decode_register.value_final.unwrap();
                 set_zs!(cpu_state,cpu_state.a);
