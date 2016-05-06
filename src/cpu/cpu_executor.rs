@@ -39,7 +39,7 @@ macro_rules! stack_pull16 {
 macro_rules! compare {
     ($cpu_state:expr,$a:expr,$b:expr) => {
         {
-            set_zs!($cpu_state,$a - $b);
+            set_zs!($cpu_state, ($a as i16 - $b as i16) as u8);
             $cpu_state.C = $a >= $b;
         }
     }
