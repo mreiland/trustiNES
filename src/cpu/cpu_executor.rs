@@ -337,6 +337,11 @@ impl CpuExecutor {
                 let val = (stack_pull8!(cpu_state,mem).unwrap()&0xEF) | 0x20;
                 cpu_state.pack_flags(val);
             },
+    		OpcodeClass::RTI => {
+                let p = stack_pull8!(cpu_state,mem).unwrap();
+                cpu_state.pack_flags(p);
+                cpu_state.pc = stack_pull16!(cpu_state,mem).unwrap();
+            },
     		OpcodeClass::RTS => {
                 cpu_state.pc = stack_pull16!(cpu_state,mem).unwrap() + 1;
             },
