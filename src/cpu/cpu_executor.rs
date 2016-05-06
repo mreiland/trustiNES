@@ -377,6 +377,10 @@ impl CpuExecutor {
                 cpu_state.y = cpu_state.a;
                 set_zs!(cpu_state,cpu_state.y);
     		},
+    		OpcodeClass::TXA => {
+                cpu_state.a = cpu_state.x;
+                set_zs!(cpu_state,cpu_state.a);
+    		},
     		OpcodeClass::TYA => {
                 cpu_state.a = cpu_state.y;
                 set_zs!(cpu_state,cpu_state.a);
