@@ -260,11 +260,11 @@ impl CpuExecutor {
                 cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		OpcodeClass::DEX => {
-                cpu_state.x -= 1;
+                cpu_state.x = (cpu_state.x as i16 - 1) as u8;
                 set_zs!(cpu_state,cpu_state.x);
     		},
     		OpcodeClass::DEY => {
-                cpu_state.y -= 1;
+                cpu_state.y = (cpu_state.y as i16 - 1) as u8;
                 set_zs!(cpu_state,cpu_state.y);
     		},
     		OpcodeClass::EOR => {
@@ -274,11 +274,11 @@ impl CpuExecutor {
                 cpu_state.pc += cpu_state.decode_register.info.len as u16-1;
     		},
     		OpcodeClass::INX => {
-                cpu_state.x += 1;
+                cpu_state.x = (cpu_state.x as u16 + 1) as u8;
                 set_zs!(cpu_state,cpu_state.x);
     		},
     		OpcodeClass::INY => {
-                cpu_state.y += 1;
+                cpu_state.y = (cpu_state.y as u16 + 1) as u8;
                 set_zs!(cpu_state,cpu_state.y);
     		},
     		OpcodeClass::LDA => {
